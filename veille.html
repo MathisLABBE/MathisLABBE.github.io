@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Veille informatique – l'écosystème .NET | Mathis LABBE</title>
+  <meta name="description" content="Veille technologique de Mathis LABBE sur l'écosystème .NET : cohabitation entre .NET Framework, .NET Standard et .NET 10, distribution de bibliothèques internes avec NuGet.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="projets.html">Projets</a></li>
+          <li><a href="competences.html">Compétences</a></li>
+          <li><a href="veille.html" aria-current="page">Veille</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <h1>Veille informatique : l'écosystème .NET</h1>
+    <p>Je travaille tous les jours avec <strong>.NET</strong>, la plateforme de développement de Microsoft. Je suis son évolution pour comprendre les choix techniques de mes projets et anticiper ceux qui viendront. Sur cette page, je partage ce que j'apprends, en partant de situations rencontrées en alternance.</p>
+
+    <section>
+      <h2>Ma méthode</h2>
+      <ul>
+        <li><strong>Sources officielles</strong> : le <a href="https://devblogs.microsoft.com/dotnet/">blog .NET de Microsoft</a> et la <a href="https://learn.microsoft.com/fr-fr/dotnet/">documentation Microsoft Learn</a>, notamment les pages « Nouveautés ».</li>
+        <li><strong>Événements</strong> : la conférence annuelle <a href="https://www.dotnetconf.net/">.NET Conf</a>, où sont présentées les nouvelles versions.</li>
+        <li><strong>Pratique</strong> : je relie chaque sujet à un cas concret de mes projets.</li>
+        <li class="a-completer">[À compléter : tes autres sources réelles – newsletters, chaînes, podcasts, comptes suivis, outil d'agrégation…]</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Articles</h2>
+
+      <article class="carte" id="trois-versions">
+        <h3>Un même logiciel, trois versions de .NET : pourquoi ?</h3>
+        <p><em>Novembre 2026 · lié au projet <a href="projets/spoolbox.html">SpoolBox</a></em></p>
+        <p><strong>En travaillant sur SpoolBox, j'ai découvert une solution qui mélange trois « saveurs » de .NET.</strong> Ce n'est pas un oubli : c'est une situation courante dans les entreprises qui ont des applications anciennes.</p>
+        <ul>
+          <li><strong>.NET 10</strong>, la version actuelle avec support long terme (sortie en novembre 2025), pour l'interface WPF, l'API et le traitement de nuit.</li>
+          <li><strong>.NET Standard 2.0</strong> pour la bibliothèque commune. Ce n'est pas une plateforme mais un « contrat » : une bibliothèque qui le respecte peut être utilisée à la fois par du .NET moderne et par l'ancien .NET Framework.</li>
+          <li><strong>.NET Framework 4.8</strong>, en 32 bits, pour la génération des PDF. Cette plateforme n'évolue plus, mais certaines bibliothèques anciennes ne fonctionnent qu'avec elle.</li>
+        </ul>
+        <p><strong>Ce que j'en retiens</strong> : quand une dépendance bloque la migration, on peut l'<strong>isoler dans un programme séparé</strong> plutôt que de bloquer toute l'application sur une vieille version. Il faut alors gérer la communication entre les deux et un délai maximal d'exécution, mais le reste du code profite des nouveautés de .NET.</p>
+      </article>
+
+      <article class="carte" id="nuget">
+        <h3>Partager du code entre applications : DLL copiée ou paquet NuGet ?</h3>
+        <p><em>Novembre 2026 · lié au projet <a href="projets/sirene.html">Sirene</a></em></p>
+        <p><strong>Pour qu'une application envoie une notification à Sirene, elle doit utiliser une petite bibliothèque commune.</strong> Toute la question est : comment la distribuer ?</p>
+        <ul>
+          <li><strong>Copier une DLL</strong> dans chaque projet est rapide, mais on perd vite la trace de la version utilisée par chaque application.</li>
+          <li><strong>Publier un paquet NuGet</strong>, sur un flux privé à l'entreprise, permet de versionner la bibliothèque, de voir qui utilise quelle version et de mettre à jour proprement.</li>
+        </ul>
+        <p><strong>Ce que j'en retiens</strong> : NuGet est la bonne cible, mais l'entreprise prévoit d'y passer pour tous ses frameworks internes en même temps. Le choix retenu est donc une DLL simple pour l'instant, documentée comme <strong>dette technique</strong> : faire le travail deux fois aurait coûté plus cher que d'attendre.</p>
+      </article>
+
+      <p class="a-completer">[À compléter : un article sur une nouveauté récente de .NET ou de C# que tu as testée ou suivie.]</p>
+    </section>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

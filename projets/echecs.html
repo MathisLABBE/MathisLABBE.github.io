@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Application pour apprendre les échecs en C# / WPF | Mathis LABBE</title>
+  <meta name="description" content="Projet personnel de Mathis LABBE : une application d'échecs en C# / WPF qui montre les déplacements possibles de chaque pièce pour aider à apprendre les règles.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="../index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="../index.html">Accueil</a></li>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../projets.html" aria-current="page">Projets</a></li>
+          <li><a href="../competences.html">Compétences</a></li>
+          <li><a href="../veille.html">Veille</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <p><a href="../projets.html">← Tous les projets</a></p>
+
+    <h1>Une application pour apprendre les échecs</h1>
+    <p><strong>Cette application de bureau permet de jouer aux échecs en montrant, à chaque pièce sélectionnée, les cases où elle a le droit d'aller.</strong> L'objectif est d'aider un débutant à apprendre les déplacements en jouant, sans avoir les règles sous les yeux. Le projet est en cours de développement.</p>
+
+    <dl class="fiche">
+      <dt>Cadre</dt>
+      <dd>Projet personnel</dd>
+      <dt>Dates</dt>
+      <dd>Depuis juin 2026 – en cours</dd>
+      <dt>Équipe</dt>
+      <dd>Seul</dd>
+      <dt>Technologies</dt>
+      <dd>C#, .NET 10, WPF, Git, GitHub</dd>
+      <dt>Lien</dt>
+      <dd><a href="https://github.com/MathisLABBE/Echecs">Code source sur GitHub</a></dd>
+    </dl>
+
+    <section>
+      <h2>Pourquoi ce projet</h2>
+      <p>Pour un débutant, la première difficulté aux échecs n'est pas la stratégie mais de <strong>retenir comment chaque pièce se déplace</strong>. Une application qui montre les coups possibles permet d'apprendre en jouant, plutôt qu'en lisant des règles.</p>
+      <p>C'était aussi un bon exercice de <strong>programmation orientée objet</strong> : six types de pièces qui partagent un comportement commun, mais qui ont chacune leurs propres règles.</p>
+    </section>
+
+    <section>
+      <h2>Ce que fait l'application</h2>
+      <ul>
+        <li><strong>Plateau complet</strong> de 8 × 8 cases avec les 32 pièces en position de départ.</li>
+        <li><strong>Sélection d'une pièce au clic</strong> : les cases où elle peut aller sont aussitôt surlignées.</li>
+        <li><strong>Déplacements et prises</strong> respectant les règles de chaque pièce, y compris le double pas du pion à son premier coup.</li>
+        <li><strong>Tour par tour</strong> : impossible de jouer les pièces de l'adversaire.</li>
+        <li><strong>Promotion du pion</strong> : arrivé au bout du plateau, un menu propose de le transformer en dame, tour, fou ou cavalier.</li>
+      </ul>
+      <figure>
+        <img src="../images/echecs/plateau.webp" alt="Plateau d'échecs vert et blanc après deux coups : le fou blanc est sélectionné et les cases où il peut aller, en diagonale, sont surlignées en gris." width="640" height="640" loading="lazy">
+        <figcaption>Le fou est sélectionné : ses cases possibles sont surlignées en gris.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Défis techniques et solutions</h2>
+
+      <h3>Six pièces, une seule logique d'affichage</h3>
+      <p>Chaque pièce hérite d'une <strong>classe commune</strong> qui gère son image, sa couleur, sa position et l'affichage des cases disponibles. Chaque type de pièce ne redéfinit qu'une seule méthode : celle qui calcule ses déplacements autorisés. Ajouter ou corriger une règle ne touche donc qu'un seul fichier.</p>
+
+      <h3>Des règles qui dépendent du sens du plateau</h3>
+      <p>Un pion n'avance pas dans le même sens selon sa couleur, et la dame et le roi changent de place si l'on joue les noirs. J'ai fait dépendre ces règles du <strong>camp du joueur</strong> plutôt que de la couleur des pièces, pour pouvoir à terme retourner le plateau.</p>
+
+      <h3>Mettre la partie en pause pendant la promotion</h3>
+      <p>Quand un pion est promu, la partie doit attendre le choix du joueur avant de passer au tour suivant. Le moteur de jeu <strong>bloque les clics</strong> tant que le choix n'est pas fait, et prévient le plateau par un événement pour qu'il affiche le menu au bon endroit.</p>
+    </section>
+
+    <section>
+      <h2>Avec le recul : ce que je ferais autrement</h2>
+      <ul>
+        <li><strong>Séparer les règles du jeu de l'interface.</strong> Aujourd'hui, chaque pièce est à la fois un élément graphique et le porteur de ses règles, et le moteur de jeu dépend des cases affichées à l'écran. C'est ce qui rend difficile la prochaine étape : pour détecter un échec, il faut simuler des coups « dans sa tête », sans rien afficher. Je construirais d'abord un modèle de plateau indépendant de WPF, puis l'interface par-dessus.</li>
+        <li><strong>Tester chaque pièce automatiquement.</strong> Une fois les règles isolées, chaque déplacement peut être vérifié par un test unitaire sur une position donnée, au lieu de rejouer des parties à la main.</li>
+        <li><strong>Vérifier les bords du plateau proprement.</strong> J'utilise des exceptions pour détecter qu'une case est hors du plateau ; un simple test des coordonnées serait plus clair et plus rapide.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Ce que ce projet m'a appris</h2>
+      <ul>
+        <li>Concevoir une <strong>hiérarchie de classes</strong> propre, où chaque classe a une responsabilité claire.</li>
+        <li>Traduire des règles du monde réel en algorithmes, en pensant aux cas limites (bords du plateau, cases occupées).</li>
+        <li>Faire communiquer la logique et l'interface par des <strong>événements</strong>.</li>
+        <li>Versionner un projet personnel avec Git, par petites étapes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Prochaines étapes</h2>
+      <ul>
+        <li>Détecter l'<strong>échec</strong> et l'<strong>échec et mat</strong>, et interdire les coups qui mettent son propre roi en danger.</li>
+        <li>Ajouter les coups spéciaux : <strong>roque</strong> et <strong>prise en passant</strong>.</li>
+        <li>Ajouter un mode d'apprentissage guidé : explication de chaque pièce, exercices.</li>
+      </ul>
+      <p class="a-completer">[À vérifier : ce que tu prévois vraiment pour la partie « apprendre ».]</p>
+    </section>
+
+    <p><a href="projet-ia.html">← Projet précédent : réseau de neurones</a> · <a href="refonte-site.html">Projet suivant : refonte du site de tennis de table →</a></p>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="../contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

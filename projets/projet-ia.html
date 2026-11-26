@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Réseau de neurones codé sans bibliothèque en C# / WPF | Mathis LABBE</title>
+  <meta name="description" content="Projet personnel de Mathis LABBE : un réseau de neurones programmé entièrement en C#, sans bibliothèque d'IA, avec apprentissage par rétropropagation et visualisation WPF du réseau.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="../index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="../index.html">Accueil</a></li>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../projets.html" aria-current="page">Projets</a></li>
+          <li><a href="../competences.html">Compétences</a></li>
+          <li><a href="../veille.html">Veille</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <p><a href="../projets.html">← Tous les projets</a></p>
+
+    <h1>Un réseau de neurones codé sans bibliothèque</h1>
+    <p><strong>Pour comprendre vraiment comment une intelligence artificielle « apprend », j'ai programmé un réseau de neurones de A à Z, sans aucune bibliothèque d'IA.</strong> L'application permet de choisir la forme du réseau, de lancer son entraînement et de voir les valeurs de chaque neurone évoluer à l'écran.</p>
+
+    <dl class="fiche">
+      <dt>Cadre</dt>
+      <dd>Projet personnel</dd>
+      <dt>Dates</dt>
+      <dd>Mars à mai 2026, en parallèle de l'alternance</dd>
+      <dt>Équipe</dt>
+      <dd>Seul</dd>
+      <dt>Technologies</dt>
+      <dd>C#, .NET 10, WPF (liaison de données, contrôles personnalisés, programmation asynchrone)</dd>
+      <dt>Lien</dt>
+      <dd><a href="https://github.com/MathisLABBE/ReseauNeurone">Code source sur GitHub</a></dd>
+    </dl>
+
+    <section>
+      <h2>Pourquoi ce projet</h2>
+      <p>On utilise l'IA partout, mais on la manipule presque toujours à travers des bibliothèques qui cachent son fonctionnement. Je voulais <strong>comprendre ce qui se passe à l'intérieur</strong> : comment un réseau calcule une réponse, comment il mesure son erreur et comment il se corrige.</p>
+      <p>Le plus sûr moyen de comprendre était de tout écrire moi-même, avec les mathématiques sous les yeux, dans le langage que j'utilise tous les jours en alternance.</p>
+    </section>
+
+    <section>
+      <h2>Ce que fait l'application</h2>
+      <ul>
+        <li><strong>Construire un réseau à la demande</strong> : on décrit sa forme par une simple ligne de texte, par exemple <code>1;5;5;1</code> (1 entrée, deux couches cachées de 5 neurones, 1 sortie).</li>
+        <li><strong>Visualiser le réseau</strong> : chaque neurone est dessiné avec sa valeur actuelle, relié à ceux de la couche suivante ; l'affichage se recalcule et se centre selon la taille du réseau.</li>
+        <li><strong>Entraîner le réseau</strong> : un bouton lance l'apprentissage sur un jeu de données, avec une barre de progression. Les réglages du nombre de boucles et de la vitesse sont déjà dans l'interface, mais pas encore reliés au calcul.</li>
+        <li><strong>Garder l'interface fluide</strong> pendant les calculs, qui peuvent durer plusieurs secondes.</li>
+      </ul>
+      <figure>
+        <img src="../images/ia/entrainement.webp" alt="L'application pendant l'entraînement : à gauche, le panneau de paramètres (structure 1;5;5;1, bouton de création, barre de progression) ; à droite, le réseau dessiné avec 1 entrée, deux couches de 5 neurones et 1 sortie, chaque neurone affichant sa valeur." width="1100" height="814" loading="lazy">
+        <figcaption>Un réseau 1;5;5;1 pendant l'entraînement : chaque neurone affiche sa valeur actuelle.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Comment le réseau apprend</h2>
+      <p>L'apprentissage tient en deux étapes, répétées des milliers de fois :</p>
+      <ol>
+        <li><strong>Propagation avant</strong> : les valeurs d'entrée traversent le réseau couche par couche. Chaque neurone additionne les valeurs reçues, pondérées par des « poids », ajoute un « biais », puis passe le résultat dans une fonction d'activation (la sigmoïde) qui le ramène entre 0 et 1.</li>
+        <li><strong>Rétropropagation</strong> : on compare la réponse obtenue à la réponse attendue, puis on remonte l'erreur de la sortie vers l'entrée pour corriger légèrement chaque poids et chaque biais (taux d'apprentissage de 0,1).</li>
+      </ol>
+      <p>Pour vérifier que l'ensemble fonctionne, j'ai commencé par une tâche dont je connais la réponse : apprendre au réseau à <strong>recopier le nombre qu'on lui donne</strong>, à partir de 1 000 exemples générés aléatoirement.</p>
+    </section>
+
+    <section>
+      <h2>Défis techniques et solutions</h2>
+
+      <h3>Passer d'un prototype figé à un réseau de n'importe quelle forme</h3>
+      <p>Ma première version, en mars 2026, avait une structure écrite en dur dans le code : changer le nombre de neurones obligeait à réécrire les tableaux à la main. Dans la seconde version, la structure est <strong>générée automatiquement</strong> à partir de la description texte, et le code est séparé en couches : la logique du réseau d'un côté, sa création de l'autre, et l'affichage dans des contrôles WPF dédiés.</p>
+
+      <h3>Ne pas figer l'écran pendant l'entraînement</h3>
+      <p>L'entraînement enchaîne un million de calculs (1 000 exemples × 1 000 boucles). Lancé tel quel, il bloquait la fenêtre jusqu'à la fin. J'ai rendu le traitement <strong>asynchrone</strong> et je redonne la main à l'interface toutes les 10 boucles : la barre de progression avance et l'application reste utilisable.</p>
+
+      <h3>Afficher un réseau qui change de taille</h3>
+      <p>Un réseau de 3 neurones et un réseau de 30 ne tiennent pas dans le même espace. J'ai créé des <strong>contrôles personnalisés</strong> (neurone, liaison, réseau) qui calculent la position de chaque élément à partir du nombre de couches et de neurones, puis recentrent le dessin quand la fenêtre change de taille.</p>
+    </section>
+
+    <section>
+      <h2>Avec le recul : ce que je ferais autrement</h2>
+      <ul>
+        <li><strong>Séparer le calcul de l'affichage.</strong> Chaque neurone est un objet qui prévient l'interface à chaque changement de valeur : pendant l'entraînement, cela fait des millions de notifications inutiles. Je stockerais les poids dans de simples tableaux pour les calculs, et je ne mettrais l'affichage à jour qu'à intervalle régulier.</li>
+        <li><strong>Choisir un vrai problème de test.</strong> Recopier un nombre prouve que le code tourne, pas que le réseau apprend quelque chose d'intéressant. Je passerais à un cas classique, comme le problème du « OU exclusif » ou la reconnaissance de chiffres manuscrits, avec des données d'entraînement et des données de test séparées.</li>
+        <li><strong>Mesurer et vérifier.</strong> Je n'affiche pas l'évolution de l'erreur, donc je ne sais pas précisément quand le réseau a fini d'apprendre. J'ajouterais une courbe d'erreur et des tests unitaires qui comparent la propagation à des valeurs calculées à la main.</li>
+        <li><strong>Utiliser Git dès le premier jour.</strong> Mes versions successives sont des copies de dossiers, ce qui rend la progression difficile à retracer et à montrer.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Ce que ce projet m'a appris</h2>
+      <ul>
+        <li>Le fonctionnement interne d'un réseau de neurones : poids, biais, fonction d'activation, calcul de l'erreur et descente de gradient.</li>
+        <li>L'intérêt de <strong>repartir d'un prototype</strong> pour en faire une version propre et générique.</li>
+        <li>Des notions WPF que j'utilise aussi en alternance : liaison de données, contrôles personnalisés, styles et traitements asynchrones.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Suite du projet</h2>
+      <ul>
+        <li><strong>Neuroévolution</strong> : j'ai commencé une seconde approche, où le réseau ne se corrige plus par calcul d'erreur mais par sélection, comme dans la nature : on garde et on copie les réseaux qui obtiennent le meilleur score, en y ajoutant de petites variations.</li>
+        <li>Entraîner le réseau sur des problèmes plus intéressants que la recopie, et afficher l'évolution de l'erreur sous forme de courbe.</li>
+        <li>Colorer les liaisons selon la valeur de leur poids pour voir le réseau « apprendre » en direct.</li>
+      </ul>
+      <p class="a-completer">[À vérifier : ces pistes correspondent-elles à ce que tu veux faire ensuite ?]</p>
+    </section>
+
+    <p><a href="sirene.html">← Projet précédent : Sirene</a> · <a href="echecs.html">Projet suivant : application d'échecs →</a></p>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="../contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

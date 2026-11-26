@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CV – Mathis LABBE, développeur C# / .NET en alternance</title>
+  <meta name="description" content="CV de Mathis LABBE : BUT Informatique en alternance chez 3ma group, développement C# / .NET, WPF, SQL Server.">
+  <!--
+    COMMENT MODIFIER CE CV
+    1. Modifiez le texte directement dans ce fichier (VS Code, Notepad++…).
+    2. Les couleurs se changent en haut du <style>, dans :root.
+    3. Pour régénérer le PDF : clic droit sur generer-pdf.ps1 > « Exécuter avec PowerShell »
+       (ou ouvrez ce fichier dans Chrome > Imprimer > Enregistrer au format PDF,
+       marges : Aucune, cochez « Graphiques d'arrière-plan »).
+    Le CV doit tenir sur une page : si vous ajoutez du texte, vérifiez le PDF.
+  -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --fond-clair: #ffffff;
+      --fond-sombre: #2f3a37;
+      --accent: #f5d61b;
+      --texte: #2f3a37;
+      --texte-clair: #f2f2f2;
+      --texte-doux: #c9d0cd;
+    }
+
+    @page { size: A4; margin: 0; }
+
+    * { box-sizing: border-box; }
+
+    html, body { margin: 0; padding: 0; }
+
+    body {
+      font-family: "Roboto", Arial, sans-serif;
+      font-size: 9.4pt;
+      line-height: 1.38;
+      color: var(--texte);
+      background: #888;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 74mm 1fr;
+      overflow: hidden;
+      background: var(--fond-clair);
+    }
+
+    @media screen { .page { margin: 10mm auto; box-shadow: 0 0 8mm rgba(0,0,0,.3); } }
+    @media print { body { background: none; } }
+
+    /* Écrans étroits (téléphone, tablette) : une seule colonne, sans largeur A4 fixe.
+       N'affecte pas l'impression ni la génération du PDF. */
+    @media screen and (max-width: 220mm) {
+      body { font-size: 11pt; background: var(--fond-clair); }
+      .page { width: auto; height: auto; margin: 0; box-shadow: none; grid-template-columns: 1fr; overflow: visible; }
+      .page > * { min-width: 0; }
+      h1, h2 { overflow-wrap: anywhere; }
+    }
+
+    h1, h2 { font-family: "Archivo Black", "Arial Black", sans-serif; font-weight: 400; margin: 0; }
+
+    a { color: inherit; text-decoration: none; }
+
+    ul { margin: 0; padding-left: 4.2mm; }
+    li { margin-bottom: 1.1mm; }
+
+    /* ---------- Colonne de gauche ---------- */
+    .gauche { padding: 11mm 7mm 8mm 9mm; font-size: 9pt; }
+
+    .photo {
+      width: 100%;
+      height: 58mm;
+      object-fit: cover;
+      object-position: 50% 28%;
+      display: block;
+      margin-bottom: 5mm;
+    }
+
+    .gauche h2 {
+      font-size: 12pt;
+      letter-spacing: .3pt;
+      margin: 4.5mm 0 1.8mm;
+    }
+    .gauche section:first-of-type h2 { margin-top: 0; }
+
+    .gauche p { margin: 0 0 1.2mm; }
+
+    .contact dl {
+      display: grid;
+      grid-template-columns: 14mm 1fr;
+      gap: .8mm 1.5mm;
+      margin: 0;
+      font-size: 8.7pt;
+    }
+    .contact dt { font-weight: 700; }
+    .contact dd { margin: 0; overflow-wrap: anywhere; }
+
+    .competences dt { font-weight: 700; margin-top: 1.3mm; }
+    .competences dd { margin: 0; }
+
+    /* ---------- Colonne de droite ---------- */
+    .droite {
+      background: var(--fond-sombre);
+      color: var(--texte-clair);
+      padding: 13mm 11mm 10mm 10mm;
+    }
+
+    .nom {
+      color: var(--accent);
+      font-size: 34pt;
+      line-height: .95;
+      letter-spacing: 1pt;
+    }
+
+    .titre {
+      font-size: 15pt;
+      margin: 3mm 0 0;
+      padding-bottom: 3mm;
+      border-bottom: .8mm solid var(--accent);
+    }
+
+    .droite h2 {
+      color: var(--accent);
+      font-size: 13pt;
+      letter-spacing: .3pt;
+      margin: 7mm 0 2.5mm;
+      padding-bottom: 1mm;
+      border-bottom: .5mm solid var(--accent);
+    }
+
+    .droite p { margin: 0 0 1.5mm; }
+
+    .entree { margin-bottom: 3.8mm; }
+    .droite li { margin-bottom: 1.6mm; }
+    .entree-tete {
+      display: flex;
+      justify-content: space-between;
+      gap: 3mm;
+      font-weight: 700;
+    }
+    .entree-tete span:last-child { white-space: nowrap; font-weight: 500; color: var(--accent); }
+    .sous-titre { color: var(--texte-doux); margin: .5mm 0 1.2mm; }
+
+    .droite strong { color: #fff; }
+  </style>
+</head>
+<body>
+  <main class="page">
+
+    <!-- ================= COLONNE DE GAUCHE ================= -->
+    <aside class="gauche">
+      <img class="photo" src="photo.jpg" alt="Photo de Mathis LABBE">
+
+      <section class="contact">
+        <h2>CONTACT</h2>
+        <dl>
+          <dt>Tél.</dt><dd><a href="tel:+33783196467">07 83 19 64 67</a></dd>
+          <dt>E-mail</dt><dd><a href="mailto:mathislabbe64@gmail.com">mathislabbe64@gmail.com</a></dd>
+          <dt>Lieu</dt><dd>Lautenbach (68)</dd>
+          <!-- À METTRE À JOUR : l'adresse définitive du portfolio une fois en ligne -->
+          <dt>Portfolio</dt><dd><a href="https://mathislabbe.github.io/Portfolio/">mathislabbe.github.io/Portfolio</a></dd>
+          <dt>GitHub</dt><dd><a href="https://github.com/MathisLABBE">github.com/MathisLABBE</a></dd>
+          <dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">Mathis LABBE</a></dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>PROFIL</h2>
+        <p>Développeur en alternance, j'aime partir d'un vrai problème d'utilisateur et le régler avec un outil simple et fiable. Je prends en charge une application de bout en bout, du besoin à la mise en production.</p>
+      </section>
+
+      <section>
+        <h2>COMPÉTENCES</h2>
+        <dl class="competences">
+          <dt>Langages</dt>
+          <dd>C#, SQL, Java, Python, HTML, CSS, JavaScript</dd>
+          <dt>Technologies</dt>
+          <dd>.NET 10, WPF, SQL Server, API web, extensions Chrome</dd>
+          <dt>Outils</dt>
+          <dd>Visual Studio, Git, Azure DevOps, GitHub</dd>
+          <dt>Méthodes</dt>
+          <dd>Scrum, revues de code, tests de non-régression, story mapping</dd>
+        </dl>
+      </section>
+
+      <section>
+        <h2>QUALITÉS</h2>
+        <p>Rigueur · Autonomie · Sens de l'utilisateur · Esprit d'équipe · Curiosité</p>
+      </section>
+
+      <section>
+        <h2>LANGUES</h2>
+        <p>Français : langue maternelle<br>Anglais : niveau B1</p>
+      </section>
+
+      <section>
+        <h2>INTÉRÊTS</h2>
+        <p>Échecs · Veille .NET · Intelligence artificielle</p>
+      </section>
+    </aside>
+
+    <!-- ================= COLONNE DE DROITE ================= -->
+    <div class="droite">
+      <h1 class="nom">MATHIS<br>LABBE</h1>
+      <p class="titre">Développeur C# / .NET en alternance</p>
+
+      <section>
+        <h2>OBJECTIF</h2>
+        <p>Poursuivre mes études en <strong>master ou en école d'ingénieur, en alternance</strong>, à partir de <strong>septembre 2027</strong>, pour approfondir la conception logicielle et l'architecture d'applications.</p>
+      </section>
+
+      <section>
+        <h2>EXPÉRIENCE</h2>
+        <div class="entree">
+          <div class="entree-tete"><span>Alternant développeur – 3ma group</span><span>sept. 2025 – août 2027</span></div>
+          <p class="sous-titre">Équipe Desktop (applications de bureau internes) · une semaine sur deux</p>
+          <ul>
+            <li><strong>SpoolBox</strong> : développeur d'une application WPF / .NET 10 <strong>utilisée chaque jour par l'atelier</strong> pour retrouver les fichiers de production. J'en assure tout le cycle, du recueil des besoins auprès des opérateurs à la mise en production.</li>
+            <li><strong>Sirene</strong> : rôle de <strong>Product Owner</strong> sur une plateforme de notifications commune (vision produit, personas, story mapping, spécifications, modèle de données).</li>
+            <li><strong>Alfred</strong> : outil de recherche et de remplacement sécurisé d'adresses e-mail dans les paramétrages des traitements automatiques.</li>
+            <li>Sprints Scrum, revues de code quotidiennes, tests, documentation et mises en production.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>PROJETS PERSONNELS</h2>
+        <div class="entree">
+          <div class="entree-tete"><span>Refonte du site AGR Tennis de Table 68</span><span>oct. 2026</span></div>
+          <p>Six propositions de design, une maquette, puis une <strong>extension Chrome</strong> (JavaScript) qui applique la nouvelle présentation au vrai site. Proposée au responsable du site.</p>
+        </div>
+        <div class="entree">
+          <div class="entree-tete"><span>Réseau de neurones codé sans bibliothèque</span><span>2026</span></div>
+          <p>C# / WPF : réseau configurable, apprentissage par rétropropagation et visualisation en direct.</p>
+        </div>
+        <div class="entree">
+          <div class="entree-tete"><span>Application d'apprentissage des échecs</span><span>2026</span></div>
+          <p>C# / WPF : affichage des coups autorisés pour apprendre les déplacements en jouant.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>FORMATION</h2>
+        <div class="entree">
+          <div class="entree-tete"><span>BUT Informatique – IUT de Belfort</span><span>2024 – 2027</span></div>
+          <p class="sous-titre">Parcours développement d'applications · 2<sup>e</sup> et 3<sup>e</sup> années en alternance</p>
+          <p>Projets : vocodeur en Java, site web en équipe, jeu Quixo en Java (architecture MVC).</p>
+        </div>
+        <div class="entree">
+          <div class="entree-tete"><span>Baccalauréat général – Lycée Théodore Deck</span><span>2024</span></div>
+          <p class="sous-titre">Spécialités Sciences de l'ingénieur et Numérique et sciences informatiques</p>
+        </div>
+      </section>
+    </div>
+
+  </main>
+</body>
+</html>

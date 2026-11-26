@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Projets – Mathis LABBE | Applications C# / WPF, conception, projets personnels</title>
+  <meta name="description" content="Les projets de Mathis LABBE : SpoolBox (application WPF en alternance), Sirene (conception d'une plateforme de notifications), projet d'IA, application d'échecs et refonte graphique de site.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="a-propos.html">À propos</a></li>
+          <li><a href="projets.html" aria-current="page">Projets</a></li>
+          <li><a href="competences.html">Compétences</a></li>
+          <li><a href="veille.html">Veille</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <h1>Projets</h1>
+    <p>Voici les projets qui représentent le mieux ce que je sais faire : deux projets menés en alternance, l'un tourné vers le <strong>développement</strong>, l'autre vers la <strong>conception</strong>, et trois projets personnels réalisés par curiosité, sur mon temps libre. Chaque fiche présente le contexte, l'objectif, les technologies, mon rôle et les difficultés rencontrées, ainsi qu'un regard critique : <strong>ce que je ferais autrement</strong> si c'était à refaire.</p>
+
+    <section>
+      <h2>En alternance chez 3ma group</h2>
+
+      <article class="carte">
+        <h3><a href="projets/spoolbox.html">SpoolBox – le portail des fichiers de production</a></h3>
+        <p>Les opérateurs de l'atelier devaient chercher leurs fichiers d'impression à plusieurs endroits et dépendaient de transmissions manuelles. SpoolBox leur donne <strong>un point d'accès unique</strong> aux fichiers et aux informations de fabrication.</p>
+        <p><strong>Cadre</strong> : alternance, je suis le développeur de l'application, en production depuis juillet 2026.<br>
+           <strong>Technologies</strong> : C#, WPF, .NET 10, SQL Server, Azure DevOps.</p>
+      </article>
+
+      <article class="carte">
+        <h3><a href="projets/sirene.html">Sirene – une plateforme commune de notifications</a></h3>
+        <p>Chaque application interne gérait ses propres alertes, chacune à sa manière. J'ai <strong>conçu</strong> Sirene, un service unique qui reçoit les notifications de toutes les applications et les transmet aux bonnes personnes.</p>
+        <p><strong>Cadre</strong> : alternance, depuis septembre 2026, rôle de Product Owner.<br>
+           <strong>Livrables</strong> : vision produit, personas, story mapping, spécification fonctionnelle, modèle de données.</p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Projets personnels</h2>
+
+      <article class="carte">
+        <h3><a href="projets/projet-ia.html">Un réseau de neurones codé sans bibliothèque</a></h3>
+        <p>Pour comprendre ce qui se passe à l'intérieur d'une IA, j'ai programmé moi-même un réseau de neurones : sa construction, son <strong>apprentissage</strong> et son affichage à l'écran pendant l'entraînement.</p>
+        <p><strong>Cadre</strong> : projet personnel, seul, mars à mai 2026.<br>
+           <strong>Technologies</strong> : C#, .NET 10, WPF.</p>
+      </article>
+
+      <article class="carte">
+        <h3><a href="projets/echecs.html">Application pour apprendre les échecs</a></h3>
+        <p>Un jeu d'échecs qui <strong>montre les cases autorisées</strong> dès qu'on sélectionne une pièce, pour apprendre les déplacements en jouant.</p>
+        <p><strong>Cadre</strong> : projet personnel, seul, depuis juin 2026, en cours.<br>
+           <strong>Technologies</strong> : C#, .NET 10, WPF, Git.</p>
+      </article>
+
+      <article class="carte">
+        <h3><a href="projets/refonte-site.html">Refonte du site du tennis de table haut-rhinois</a></h3>
+        <p>Six propositions de design, une maquette, puis une <strong>extension Chrome</strong> qui applique la nouvelle présentation au vrai site sans toucher à son serveur. J'ai ensuite proposé mon travail au responsable du site.</p>
+        <p><strong>Cadre</strong> : projet personnel, seul, octobre 2026.<br>
+           <strong>Technologies</strong> : HTML, CSS, JavaScript, extension Chrome, Python.</p>
+      </article>
+    </section>
+
+    <section>
+      <h2>Autres projets</h2>
+      <p>D'autres réalisations, présentées plus brièvement. Chacune a son code et sa documentation sur GitHub.</p>
+      <div class="tableau-defilant">
+        <table>
+          <thead>
+            <tr><th scope="col">Projet</th><th scope="col">En bref</th><th scope="col">Cadre</th><th scope="col">Technologies</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="https://github.com/MathisLABBE/NFCure">NFCure</a></td>
+              <td>Envoyer un message <strong>chiffré</strong> d'un téléphone à l'autre en les approchant, sans réseau ni Internet : le message passe par le NFC et seul le destinataire peut le lire. J'ai créé le projet, conçu l'interface et relié l'interface à l'envoi et à la réception NFC.</td>
+              <td>BUT Informatique, en équipe, janvier 2026</td>
+              <td>C#, .NET MAUI, Android (NFC), chiffrement RSA</td>
+            </tr>
+            <tr>
+              <td><a href="https://github.com/MathisLABBE/MineControl">MineControl</a></td>
+              <td>Application de bureau qui se connecte <strong>en SSH</strong> à un serveur Linux et affiche en temps réel l'état d'un serveur de jeu, avec vérification de l'identité du serveur et tests unitaires.</td>
+              <td>Projet personnel, seul, en cours</td>
+              <td>C#, .NET 10, WPF, SSH.NET, xUnit</td>
+            </tr>
+            <tr>
+              <td><a href="https://github.com/MathisLABBE/DeepDrill">DeepDrill</a></td>
+              <td>Jeu mobile en 2D : on pilote une foreuse le plus profond possible dans un terrain <strong>généré à l'infini</strong>, puis on achète des améliorations avec les minerais récoltés.</td>
+              <td>Projet personnel, seul, depuis août 2026</td>
+              <td>Unity 6, C#</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

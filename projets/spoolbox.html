@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SpoolBox – application WPF / .NET pour l'atelier de production | Mathis LABBE</title>
+  <meta name="description" content="SpoolBox, application C# / WPF développée en alternance chez 3ma group : accès unique aux fichiers de production, recherche, filtres, impression groupée par règles, API web, SQL Server, optimisation des performances.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="../index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="../index.html">Accueil</a></li>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../projets.html" aria-current="page">Projets</a></li>
+          <li><a href="../competences.html">Compétences</a></li>
+          <li><a href="../veille.html">Veille</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <p><a href="../projets.html">← Tous les projets</a></p>
+
+    <h1>SpoolBox – le portail des fichiers de production</h1>
+    <p><strong>SpoolBox est une application de bureau qui donne aux opérateurs de l'atelier un accès unique aux fichiers d'impression et aux informations dont ils ont besoin pour produire.</strong> Elle remplace des recherches dans plusieurs dossiers et des transmissions manuelles par un seul écran, fiable et à jour. Je la développe depuis février 2026 ; elle est utilisée en production depuis l'été 2026.</p>
+
+    <dl class="fiche">
+      <dt>Cadre</dt>
+      <dd>Alternance chez 3ma group, équipe Desktop</dd>
+      <dt>Dates</dt>
+      <dd>Depuis février 2026 – en production depuis juillet 2026, évolutions en cours</dd>
+      <dt>Équipe</dt>
+      <dd>Je suis le développeur de l'application. Mon maître d'alternance en est le Product Owner, et les autres développeurs de l'équipe relisent mon code.</dd>
+      <dt>Technologies</dt>
+      <dd>C#, WPF, .NET 10, .NET Framework 4.8, API web, SQL Server, Azure DevOps, Git</dd>
+      <dt>Lien</dt>
+      <dd>Application interne à l'entreprise : le code et l'application ne sont pas publics.</dd>
+    </dl>
+
+    <section>
+      <h2>Le problème de départ</h2>
+      <p>Dans l'atelier, les opérateurs travaillent à partir de <strong>« spools »</strong> : les fichiers, souvent en PDF, prêts à être imprimés. Ces fichiers étaient <strong>dispersés</strong> entre plusieurs emplacements, et une partie des informations arrivait par des fiches papier ou des messages du service planning.</p>
+      <p>Conséquences : du temps perdu à chercher le bon fichier, un risque d'utiliser une version obsolète, et un service planning occupé à des transmissions à faible valeur ajoutée.</p>
+      <figure>
+        <img src="../images/spoolbox/avant-apres.webp" alt="Schéma avant / après. Avant : l'utilisateur interroge lui-même deux serveurs de données. Après : l'utilisateur passe uniquement par SpoolBox, qui interroge les deux serveurs." width="1227" height="883" loading="lazy">
+        <figcaption>Avant, l'opérateur allait chercher lui-même l'information à plusieurs endroits. Avec SpoolBox, il n'a plus qu'un seul point d'entrée.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Ce que fait l'application</h2>
+      <ul>
+        <li><strong>Liste des dossiers de production</strong>, alimentée automatiquement par les traitements d'export et rafraîchie à intervalle régulier.</li>
+        <li><strong>Recherche, tri et filtres</strong> (client, opération, état, machine…), avec des <strong>vues enregistrées</strong> personnelles ou partagées, et le choix des colonnes affichées pour chaque utilisateur.</li>
+        <li><strong>Explorateur de fichiers intégré</strong> : chaque fichier du dossier affiche son état, et l'opérateur peut l'ouvrir ou le copier sans quitter l'application.</li>
+        <li><strong>Fiche de travail</strong> (ordre de fabrication) générée en PDF et ouverte en un clic, avec ses informations clés (format, papier, grammage, parcours dans les ateliers).</li>
+        <li><strong>Impression groupée</strong> : on sélectionne plusieurs dossiers et l'application imprime les bons documents, selon des règles configurables.</li>
+        <li><strong>États du dossier</strong> (à faire, en cours, en attente, terminé), modifiables directement depuis la liste, sur un ou plusieurs dossiers, avec un historique des actions.</li>
+        <li><strong>Traitement automatique chaque nuit</strong> : archivage des dossiers terminés ou inactifs et synchronisation des états avec l'ERP de production.</li>
+      </ul>
+      <figure>
+        <img src="../images/spoolbox/interface.webp" alt="Écran principal de SpoolBox : à gauche les vues enregistrées, en haut la recherche et les filtres, au centre le tableau des dossiers avec leur référence, opération, client, état et date, à droite les boutons Ouvrir, OF et Info." width="2000" height="1068" loading="lazy">
+        <figcaption>L'écran principal : vues enregistrées (1), recherche et filtres (2), toutes les informations d'un dossier sur une ligne (3) et actions rapides (4). Les noms des clients sont floutés.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Mon rôle</h2>
+      <ul>
+        <li><strong>Développement</strong> de l'application, de l'interface WPF à la base de données, en passant par l'API et le traitement de nuit.</li>
+        <li><strong>Recueil des retours utilisateurs</strong> : je vais voir les équipes de l'atelier, celle du matin et celle de l'après-midi, et je présente l'application aux nouveaux services qui l'adoptent.</li>
+        <li><strong>Organisation du travail</strong> en sprints : découpage en tâches, estimation en planning poker, suivi dans Azure DevOps.</li>
+        <li><strong>Qualité</strong> : revues de code par Pull Request, cahier de tests de non-régression, documentation technique et manuel d'utilisation.</li>
+        <li><strong>Mises en production</strong> : préparation des bases de données, des versions et des étapes de déploiement.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Défis techniques et solutions</h2>
+
+      <h3>Passer d'un chargement de 15 secondes à moins d'une seconde</h3>
+      <p>Le premier retour des utilisateurs a été clair : <strong>le chargement était trop long</strong>. L'application interrogeait l'ERP <strong>une fois par dossier</strong>, à l'intérieur d'une boucle. Plus il y avait de dossiers, plus c'était lent : l'écran mettait environ 15 secondes à s'afficher.</p>
+      <p>J'ai réorganisé le traitement : l'application rassemble d'abord toutes les références utiles, les récupère <strong>en une seule requête</strong>, puis les range dans un dictionnaire pour les retrouver instantanément pendant la boucle. Résultat : <strong>moins d'une seconde</strong> de chargement.</p>
+      <figure>
+        <img src="../images/spoolbox/optimisation.webp" alt="Extrait de code C# annoté en quatre étapes : sélection des références utiles, récupération globale des dossiers, transformation en dictionnaire, recherche rapide dans la boucle avec TryGetValue." width="1470" height="813" loading="lazy">
+        <figcaption>Le code après optimisation : une seule récupération (2), un dictionnaire (3) et une recherche directe dans la boucle (4).</figcaption>
+      </figure>
+
+      <h3>Générer les fiches de travail malgré une bibliothèque ancienne</h3>
+      <p>Les fiches de travail en PDF sont produites par un moteur de composition qui ne fonctionne qu'avec l'ancien <strong>.NET Framework 4.8</strong>, en 32 bits, alors que SpoolBox est en <strong>.NET 10</strong>. Avec un collègue, nous avons mis en place une <strong>API web</strong> : SpoolBox lui demande une fiche, l'API lance un petit programme séparé qui génère le PDF, avec un délai maximal. J'ai ensuite ajouté un écran de chargement et le nettoyage automatique des anciens PDF. J'en parle plus en détail dans ma <a href="../veille.html">veille sur .NET</a>.</p>
+
+      <h3>Imprimer les bons documents, sans les coder en dur</h3>
+      <p>Selon le client, il faut imprimer la fiche de suivi, certains rapports, parfois tout en double… et ces cas changent souvent. Plutôt que d'écrire chaque cas dans le code, j'ai mis en place des <strong>règles stockées en base de données</strong> (imprimer les fichiers du dossier, les rapports de production, en double…) que l'on active et règle sans redéployer l'application. La fenêtre d'impression indique pour chaque fichier quelle règle l'a ajouté.</p>
+
+      <h3>Apprendre d'une mise en production ratée</h3>
+      <p>Ma première mise en production s'est mal passée : j'ai mélangé les environnements de développement, de recette et de production, et publié de mauvaises versions. Depuis, je rédige pour chaque mise en production une <strong>liste d'étapes écrite à l'avance</strong> (base de données, versions, configuration, tests à faire après la mise à jour), que je valide d'abord en préproduction.</p>
+    </section>
+
+    <section>
+      <h2>Avec le recul : ce que je ferais autrement</h2>
+      <ul>
+        <li><strong>Écrire des tests automatisés dès le départ.</strong> Aujourd'hui, la non-régression repose surtout sur un cahier de tests manuels, et certaines parties du code n'ont aucun test unitaire. Chaque évolution demande donc de tout revérifier à la main. Je mettrais en place les tests en même temps que les premières fonctionnalités, quand c'est encore peu coûteux.</li>
+        <li><strong>Automatiser les mises en production.</strong> Ma mise en production ratée venait d'étapes manuelles enchaînées dans le mauvais ordre. Une liste écrite limite le risque, mais un <strong>pipeline de déploiement</strong> dans Azure DevOps, avec une configuration distincte par environnement, le supprimerait.</li>
+        <li><strong>Mesurer les performances avec des volumes réels.</strong> Le problème des 15 secondes n'est apparu qu'avec les premiers utilisateurs. J'aurais dû tester très tôt avec autant de dossiers qu'en production, et réfléchir dès la conception au cycle de vie des données : un dossier archivé n'a plus besoin d'être relu à chaque démarrage.</li>
+        <li><strong>Faire tester l'application à l'atelier plus tôt.</strong> Les premiers vrais retours des opérateurs sont arrivés après plusieurs mois de développement, et ont fait apparaître des besoins importants que nous n'avions pas prévus (un état « en cours », un filtre par machine). Un prototype montré dès les premières semaines les aurait fait ressortir plus tôt.</li>
+        <li><strong>Étendre un composant partagé plutôt que le copier.</strong> J'ai modifié une copie de l'explorateur de fichiers du framework de l'entreprise : elle ne profite plus de ses mises à jour. Je chercherais d'abord à ajouter des points d'extension au composant commun.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Ce que ce projet m'a appris</h2>
+      <ul>
+        <li>Partir d'un <strong>besoin métier réel</strong> : une semaine passée à l'atelier pendant une période de forte activité m'a fait comprendre le travail des opérateurs mieux que n'importe quelle spécification.</li>
+        <li>Penser <strong>performance</strong> dès qu'on touche aux données : un code juste peut rester inutilisable s'il est lent.</li>
+        <li>Prendre en charge une application <strong>de bout en bout</strong> : développement, tests, documentation, déploiement et suivi des retours.</li>
+        <li>Écrire un code <strong>relisible par l'équipe</strong> : certaines revues de code m'ont demandé plusieurs dizaines de corrections, et c'est ce qui m'a le plus fait progresser.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Évolutions en cours</h2>
+      <ul>
+        <li><strong>Suivi des étapes par atelier</strong> : chaque service validera sa propre étape sur un dossier, au lieu d'un seul état pour tout le dossier.</li>
+        <li>Intégrer de nouvelles sources de dossiers et réduire encore les temps de chargement.</li>
+        <li>À terme, faire de SpoolBox le seul support qui indique à l'atelier qu'un travail est prêt à produire, et remplacer les fiches papier.</li>
+      </ul>
+    </section>
+
+    <p><a href="../projets.html">← Tous les projets</a> · <a href="sirene.html">Projet suivant : Sirene →</a></p>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="../contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

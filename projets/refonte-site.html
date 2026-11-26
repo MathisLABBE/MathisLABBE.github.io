@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Refonte du site de tennis de table du Haut-Rhin en extension Chrome | Mathis LABBE</title>
+  <meta name="description" content="Projet personnel de Mathis LABBE : refonte graphique et ergonomique du site de l'AGR Tennis de Table du Haut-Rhin, livrée sous forme d'extension Chrome en HTML, CSS et JavaScript, puis proposée au responsable du site.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="../index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="../index.html">Accueil</a></li>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../projets.html" aria-current="page">Projets</a></li>
+          <li><a href="../competences.html">Compétences</a></li>
+          <li><a href="../veille.html">Veille</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <p><a href="../projets.html">← Tous les projets</a></p>
+
+    <h1>Refonte du site du tennis de table haut-rhinois</h1>
+    <p><strong>J'ai entièrement repensé l'apparence et la navigation du site de l'AGR Tennis de Table du Haut-Rhin, puis je l'ai rendue utilisable tout de suite sous forme d'extension Chrome, sans toucher au site lui-même.</strong> J'ai ensuite proposé mon travail au responsable du site. Ma proposition n'a pas été retenue, une autre personne travaillant déjà sur le sujet, mais la démarche m'a appris à présenter un projet à un vrai décideur.</p>
+
+    <dl class="fiche">
+      <dt>Cadre</dt>
+      <dd>Projet personnel, réalisé de ma propre initiative</dd>
+      <dt>Dates</dt>
+      <dd>Octobre 2026</dd>
+      <dt>Équipe</dt>
+      <dd>Seul</dd>
+      <dt>Technologies</dt>
+      <dd>HTML, CSS, JavaScript, extension Chrome (Manifest V3), Python pour les outils de test</dd>
+      <dt>Lien</dt>
+      <dd>Site d'origine : <a href="https://www.agr-tt.fr/agrtt68/">agr-tt.fr</a> · <a href="https://github.com/MathisLABBE/RefonteAGR">Extension, maquette et propositions sur GitHub</a></dd>
+    </dl>
+
+    <section>
+      <h2>Pourquoi ce projet</h2>
+      <p>Le site du comité départemental de tennis de table publie les calendriers, résultats et classements de toute la saison. L'information est là, mais <strong>difficile à trouver</strong> : menus peu explicites, petits caractères, pages pensées uniquement pour un écran d'ordinateur. Or une partie de ses visiteurs sont des personnes âgées, et beaucoup consultent les résultats depuis leur téléphone.</p>
+      <figure>
+        <img src="../images/refonte/avant.jpg" alt="Page d'accueil actuelle du site : bandeau sombre, menu en petits caractères (Annuaires, Calendriers, Résultats, Liens, Téléchargements), une seule actualité au centre et une colonne de liens en majuscules à droite." width="800" height="506" loading="lazy">
+        <figcaption>Avant : la page d'accueil actuelle du site.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Ma démarche</h2>
+      <ol>
+        <li><strong>Six propositions de design</strong>, toutes construites avec les vrais contenus du site : style « service public », « journal sportif », « fédération », portail « Je veux… »… Le style et l'organisation du menu étaient indépendants, pour pouvoir les combiner.</li>
+        <li><strong>Une maquette de cinq pages</strong> (accueil, actualité, résultats, classement, documents) dans la direction retenue : fond beige, vert forêt, grands titres, vraies photos.</li>
+        <li><strong>Une extension Chrome</strong> qui applique cette nouvelle présentation directement sur le vrai site.</li>
+        <li><strong>Une prise de contact</strong> avec le responsable du site pour lui proposer de refaire réellement son apparence.</li>
+      </ol>
+      <figure>
+        <img src="../images/refonte/propositions.jpg" alt="Page de présentation des six propositions de design, avec un menu pour passer de l'une à l'autre et la première proposition, de style service public, affichée en dessous." width="800" height="506" loading="lazy">
+        <figcaption>La page qui présentait les six propositions, chacune avec les vrais contenus du site.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Le résultat</h2>
+      <figure>
+        <img src="../images/refonte/apres-accueil.jpg" alt="Nouvelle page d'accueil : menu clair par type d'information (Résultats, Classements, Calendriers, Clubs et joueurs, Documents), bouton Contraste, grand titre Tennis de table Haut-Rhin et grande photo d'une joueuse." width="800" height="506" loading="lazy">
+        <figcaption>Après : la nouvelle page d'accueil, avec un menu organisé par type d'information.</figcaption>
+      </figure>
+      <ul>
+        <li><strong>Un menu par type d'information</strong> : Résultats, Classements, Calendriers, Clubs et joueurs, Documents.</li>
+        <li><strong>Une consigne en une phrase</strong> en haut de chaque page, par exemple « Touchez la division, puis la poule : le classement s'affiche ».</li>
+        <li><strong>Des menus déroulants en cascade transformés en étapes</strong> à déplier d'un clic, et des tableaux de résultats qui défilent au lieu de déborder.</li>
+        <li><strong>Lisibilité</strong> : texte de 18 pixels minimum, mode contraste renforcé, bouton « Haut de page ».</li>
+        <li><strong>Affichage adapté au téléphone</strong>, avec tout le menu regroupé derrière un bouton.</li>
+      </ul>
+      <figure>
+        <img src="../images/refonte/apres-classement.jpg" alt="Nouvelle page Classement des équipes : fil d'Ariane, grand titre, consigne en une phrase, photo, pastilles pour passer au Top 12 des joueurs ou au simulateur, puis l'étape 1 Choisissez la poule." width="800" height="506" loading="lazy">
+        <figcaption>Une page intérieure : fil d'Ariane, consigne, pastilles de navigation et première étape à remplir.</figcaption>
+      </figure>
+      <figure>
+        <img src="../images/refonte/apres-mobile.jpg" alt="Nouvelle page d'accueil sur téléphone : logo, bouton Menu, grand titre sur trois lignes et photos en pleine largeur." width="390" height="800" loading="lazy">
+        <figcaption>La même page d'accueil sur téléphone.</figcaption>
+      </figure>
+    </section>
+
+    <section>
+      <h2>Défis techniques et solutions</h2>
+
+      <h3>Refaire un site sans avoir accès à son serveur</h3>
+      <p>Je n'avais aucun accès au code du site. L'extension s'exécute donc <strong>dans le navigateur</strong> : elle masque la page d'origine dès son chargement, lit son contenu réel (actualités, articles, documents) et reconstruit la page selon la maquette. Rien n'est modifié sur le serveur, et un simple interrupteur réaffiche le site d'origine.</p>
+
+      <h3>Rester à jour sans jamais mettre l'extension à jour</h3>
+      <p>Si l'extension recopiait le contenu, elle serait périmée dès la première actualité publiée. Tout est donc <strong>lu sur le site à chaque visite</strong>. Les menus sont relus à chaque page et vérifiés en entier une fois par jour : une page ajoutée au site apparaît d'elle-même dans la bonne rubrique, une page supprimée disparaît.</p>
+
+      <h3>Adapter des pages que je ne contrôle pas</h3>
+      <p>Les résultats, classements et calendriers sont des pages séparées, affichées dans des cadres. L'extension agit aussi à l'intérieur de ces cadres : elle transforme les listes déroulantes en étapes, rend les tableaux défilants et <strong>ajuste automatiquement la hauteur</strong> du cadre à son contenu.</p>
+
+      <h3>Tester sans réinstaller l'extension à chaque modification</h3>
+      <p>J'ai écrit un petit <strong>serveur relais en Python</strong> qui affiche le vrai site en local en y injectant les fichiers de l'extension, avec une imitation du stockage de Chrome. J'ai aussi codé en JavaScript un générateur d'illustrations en style « low poly » (triangulation de Delaunay) pour fabriquer certaines images de la maquette.</p>
+    </section>
+
+    <section>
+      <h2>Avec le recul : ce que je ferais autrement</h2>
+      <ul>
+        <li><strong>Contacter le responsable avant de développer.</strong> J'ai présenté un projet abouti à quelqu'un qui avait déjà lancé une refonte. Un premier échange avec les propositions de design m'aurait appris la situation plus tôt, et m'aurait peut-être permis de contribuer au projet existant plutôt que d'en mener un en parallèle.</li>
+        <li><strong>Choisir un support adapté au public visé.</strong> Une extension doit être installée, et uniquement sur ordinateur : elle ne touche donc ni les personnes âgées peu à l'aise avec l'informatique, ni les utilisateurs sur téléphone, pour qui j'avais pourtant conçu l'affichage mobile. Elle reste une très bonne démonstration, mais la vraie solution serait un nouveau thème installé directement sur le site.</li>
+        <li><strong>Moins dépendre de la structure du site d'origine.</strong> L'extension lit les pages existantes pour les reconstruire : si le site change sa présentation, elle peut cesser de fonctionner. Je regrouperais toute cette lecture à un seul endroit du code, pour qu'une modification du site ne demande qu'une correction.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Ce que ce projet m'a appris</h2>
+      <ul>
+        <li><strong>Concevoir pour un public précis</strong> : ici des personnes souvent âgées, qui veulent trouver un résultat en quelques secondes.</li>
+        <li><strong>Proposer plusieurs pistes</strong> avant d'en développer une, pour laisser le choix au décideur.</li>
+        <li>Le fonctionnement d'une <strong>extension de navigateur</strong> et la manipulation d'une page web existante en JavaScript.</li>
+        <li><strong>Aller au bout d'une démarche</strong>, jusqu'à présenter mon travail à quelqu'un qui pouvait l'adopter, et accepter un refus.</li>
+      </ul>
+    </section>
+
+    <p><small>Photos de la maquette : <a href="https://unsplash.com">Unsplash</a> et <a href="https://www.pexels.com">Pexels</a> (Anat Landa, Oliver Wagenblatt, Ben Sauer, Marcus Clark, Jure Zakotnik, Conor Samuel, Maximilian Bungart, Nicholas Ismael Martinez, Nathanaël Desmeules, Ivan Cortez, Yanhao Fang, Lisa Keffer).</small></p>
+
+    <p><a href="echecs.html">← Projet précédent : application d'échecs</a></p>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="../contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>

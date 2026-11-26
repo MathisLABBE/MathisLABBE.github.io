@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sirene – conception d'une plateforme de notifications | Mathis LABBE</title>
+  <meta name="description" content="Sirene, plateforme de notifications commune aux applications internes de 3ma group : vision produit, personas, story mapping, spécification fonctionnelle et modèle de données conçus par Mathis LABBE.">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+  <a class="lien-evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="site">
+    <div class="contenu">
+      <a class="nom" href="../index.html">Mathis LABBE</a>
+      <nav aria-label="Menu principal">
+        <ul>
+          <li><a href="../index.html">Accueil</a></li>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../projets.html" aria-current="page">Projets</a></li>
+          <li><a href="../competences.html">Compétences</a></li>
+          <li><a href="../veille.html">Veille</a></li>
+          <li><a href="../contact.html">Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="contenu" class="contenu">
+
+    <p><a href="../projets.html">← Tous les projets</a></p>
+
+    <h1>Sirene – une plateforme commune de notifications</h1>
+    <p><strong>Sirene est un service qui centralise les notifications de toutes les applications internes de l'entreprise.</strong> Les applications lui confient leurs alertes ; Sirene s'occupe de savoir qui doit les recevoir, par quel moyen et sous quelle forme. Sur ce projet, je ne suis pas développeur : on m'a demandé de <strong>jouer le rôle de Product Owner</strong>, pour m'entraîner et découvrir un métier et des notions qui sortent de ma zone d'expertise. Mon travail a donc porté sur la <strong>conception</strong> : comprendre le besoin, le structurer et le traduire en spécifications prêtes à développer.</p>
+
+    <dl class="fiche">
+      <dt>Cadre</dt>
+      <dd>Alternance chez 3ma group, équipe Desktop</dd>
+      <dt>Dates</dt>
+      <dd>Depuis septembre 2026 – en cours</dd>
+      <dt>Rôle</dt>
+      <dd>Product Owner du projet. On m'a confié ce rôle pour m'entraîner et me faire découvrir des métiers et des notions qui sortent de mon domaine habituel de développeur. C'est moi qui définis ce que Sirene doit faire, accompagné par mon maître d'alternance et en intégrant les attentes du commanditaire.</dd>
+      <dt>Type de travail</dt>
+      <dd>Analyse du besoin, conception fonctionnelle et technique. Ma part s'arrête à la conception, pas au développement.</dd>
+      <dt>Outils et notions</dt>
+      <dd>Vision produit, personas, parcours utilisateurs, story mapping, modélisation de données relationnelle, C# / .NET et SQL Server (cible technique)</dd>
+      <dt>Lien</dt>
+      <dd>Documentation interne à l'entreprise : elle n'est pas publique.</dd>
+    </dl>
+
+    <section>
+      <h2>Le problème de départ</h2>
+      <p>Chaque application interne envoyait ses propres alertes, <strong>chacune à sa façon</strong> : des destinataires écrits en dur, des messages différents d'un outil à l'autre, aucun suivi de ce qui avait été envoyé ou reçu. Chaque développeur devait recoder la même logique dans chaque application.</p>
+      <h3>Un exemple concret</h3>
+      <p>Chaque nuit, l'ordonnanceur de tâches de l'entreprise lance de nombreux traitements automatiques. Quand l'un d'eux échoue, l'équipe chargée de ces traitements doit être prévenue <strong>vite et avec le bon contexte</strong> : quel traitement, quelle étape, sur quel serveur, quel message d'erreur.</p>
+      <p>Avec Sirene, l'étape d'erreur de chaque traitement déclenche une seule notification commune. Les membres de l'équipe, abonnés via leur groupe, la reçoivent dans leur boîte de réception Sirene et par e-mail. <strong>Tout nouveau traitement est couvert automatiquement</strong>, sans configuration supplémentaire.</p>
+    </section>
+
+    <section>
+      <h2>Ce que j'ai produit</h2>
+      <div class="tableau-defilant">
+        <table>
+          <thead>
+            <tr><th scope="col">Livrable</th><th scope="col">Contenu</th><th scope="col">À quoi il sert</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Vision produit</td>
+              <td>Pitch, « boîte produit » (promesse, ingrédients, fonctionnalités), analyse de la valeur métier</td>
+              <td>Mettre tout le monde d'accord sur ce qu'est Sirene… et ce qu'il n'est pas.</td>
+            </tr>
+            <tr>
+              <td>Personas et parcours</td>
+              <td>4 profils (utilisatrice, développeur, lead dev, manager) reliés par un même scénario</td>
+              <td>Vérifier que chaque fonctionnalité répond au besoin d'une personne réelle.</td>
+            </tr>
+            <tr>
+              <td>Story mapping</td>
+              <td>Découpage en une première version (MVP) puis deux versions suivantes</td>
+              <td>Livrer vite une version utile et repousser le reste sans le perdre.</td>
+            </tr>
+            <tr>
+              <td>Spécification fonctionnelle</td>
+              <td>Une soixantaine de règles : abonnements, canaux, modèles de messages, réception, historique, erreurs</td>
+              <td>Donner aux développeurs des règles précises, sans ambiguïté.</td>
+            </tr>
+            <tr>
+              <td>Documentation technique</td>
+              <td>Principes de conception, modèle de données de 22 tables, traitements, dette technique</td>
+              <td>Permettre de commencer le développement sur une base solide.</td>
+            </tr>
+            <tr>
+              <td>Présentation et maquette</td>
+              <td>Diaporama de la vision produit présenté à l'équipe, maquette des écrans</td>
+              <td>Faire valider la direction par l'équipe avant d'aller plus loin.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="a-completer">[À compléter : ajouter une capture d'un livrable non confidentiel, par exemple le story mapping ou un extrait du modèle de données, sans noms internes.]</p>
+    </section>
+
+    <section>
+      <h2>Fonctionnalités prévues</h2>
+      <ul>
+        <li><strong>Abonnements</strong> : un utilisateur peut s'abonner lui-même, être abonné par son manager ou via son groupe d'équipe.</li>
+        <li><strong>Plusieurs canaux</strong> : une boîte de réception intégrée (toujours active) et l'e-mail, puis les notifications Windows.</li>
+        <li><strong>Modèles de messages</strong> à quatre niveaux : personnel, équipe, spécifique à la notification, et par défaut.</li>
+        <li><strong>Réception en temps réel</strong>, avec recherche, filtres, lu / non lu et notifications importantes.</li>
+        <li><strong>Règles et plages « Ne pas déranger »</strong> pour que chacun choisisse quand et comment être prévenu.</li>
+        <li><strong>Traçabilité complète</strong> : chaque envoi, chaque destinataire et chaque résultat sont conservés.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Défis de conception et choix retenus</h2>
+
+      <h3>Éviter les doublons d'abonnement</h3>
+      <p>Une même personne peut être abonnée à une notification <strong>pour trois raisons à la fois</strong> : par elle-même, par son manager et par son groupe. Sans précaution, elle recevrait trois fois le même message. J'ai choisi de garder <strong>un seul abonnement actif</strong> par personne, notification et environnement, et d'enregistrer séparément ses différentes origines. Si une origine disparaît, l'abonnement reste tant qu'il en existe une autre.</p>
+
+      <h3>Ne jamais perdre l'historique</h3>
+      <p>Toutes les suppressions sont <strong>logiques</strong> : une donnée supprimée est marquée par une date, jamais effacée. Les journaux d'envoi permettent de retrouver, pour chaque notification, les paramètres reçus, les destinataires et le résultat de chaque envoi.</p>
+
+      <h3>Rendre l'intégration la plus simple possible</h3>
+      <p>Une application cliente identifie une notification par des <strong>noms lisibles</strong> (application + notification), jamais par des identifiants techniques. Si la notification n'existe pas encore, Sirene peut la créer automatiquement : un développeur peut envoyer sa première alerte sans configuration préalable.</p>
+
+      <h3>Dire clairement ce qui n'est pas encore décidé</h3>
+      <p>Plutôt que de deviner, j'ai listé les <strong>points restant à trancher</strong> (mode d'appel depuis l'ordonnanceur, règles de nouvelle tentative, durée de conservation…) et documenté la <strong>dette technique</strong> assumée, comme la distribution temporaire sous forme de simple DLL en attendant le passage de l'entreprise à NuGet.</p>
+    </section>
+
+    <section>
+      <h2>Avec le recul : ce que je ferais autrement</h2>
+      <ul>
+        <li><strong>Partir du problème avant la solution.</strong> Ma première version décrivait déjà une DLL et l'envoi d'e-mails, avant même de savoir qui avait besoin de quoi. C'est en reprenant dans l'ordre – vision, utilisateurs, puis fonctionnel et technique – que le projet a pris du sens. Je commencerais directement par là.</li>
+        <li><strong>Rencontrer de vrais utilisateurs.</strong> Mes personas sont construits à partir de ce que je sais de l'entreprise, pas d'entretiens. Je prendrais le temps d'interroger l'équipe qui reçoit aujourd'hui les alertes, pour vérifier que leurs vrais irritants correspondent à ceux que j'ai imaginés.</li>
+        <li><strong>Lever le risque principal avant de tout détailler.</strong> J'ai spécifié trois versions et 22 tables alors qu'une question décisive reste ouverte : comment l'ordonnanceur de tâches appellera Sirene. Un petit prototype technique sur ce seul point, au début, aurait été plus utile que la précision des versions 2 et 3.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Ce que ce projet m'a appris</h2>
+      <p>Le projet a démarré comme un exercice : <strong>« tu es le PO, à toi de définir ce qu'il faut faire »</strong>. Ma première version tenait en une page et ne parlait que d'e-mails. En suivant une méthode de préparation de projet transmise par mon maître d'alternance (vision, puis fonctionnel, puis technique, chaque étape validée avant la suivante), elle est devenue un vrai produit pensé pour quatre types d'utilisateurs.</p>
+      <ul>
+        <li>Me mettre à la place du <strong>Product Owner</strong> : prioriser, arbitrer, dire non à certaines demandes et défendre une vision devant l'équipe – un regard qui m'aide aussi quand je redeviens développeur.</li>
+        <li>Concevoir <strong>avant</strong> de coder : chaque règle écrite évite une question ou un bug plus tard.</li>
+        <li>Penser pour <strong>plusieurs profils d'utilisateurs</strong> aux besoins différents.</li>
+        <li>Modéliser une base de données en pensant à la <strong>traçabilité</strong> et aux évolutions.</li>
+        <li>Découper un projet ambitieux en <strong>versions livrables</strong>.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Évolutions prévues</h2>
+      <ul>
+        <li>Développement du MVP, puis des versions 2 et 3.</li>
+        <li>Nouveaux canaux : Teams, SMS, application mobile.</li>
+        <li>Corbeille et restauration des notifications.</li>
+      </ul>
+    </section>
+
+    <p><a href="spoolbox.html">← Projet précédent : SpoolBox</a> · <a href="projet-ia.html">Projet suivant : réseau de neurones →</a></p>
+
+  </main>
+
+  <footer class="site">
+    <div class="contenu">
+      <p>© 2026 Mathis LABBE · <a href="../contact.html">Contact</a> · <a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
+    </div>
+  </footer>
+</body>
+</html>
