@@ -1,80 +1,276 @@
-/* Style volontairement minimal : lisibilité et responsive uniquement.
-   Le style définitif sera travaillé dans un second temps. */
+/* Portfolio de Mathis LABBE
+   Identité du CV : vert sapin, jaune pour l'important, pêche pour les liens, titres Archivo Black, texte Roboto.
+   Grand écran : menu dans une colonne à gauche, repliable. Téléphone : menu derrière un bouton. */
+
+:root {
+  --sombre: #16302b;
+  --sombre-fonce: #1d3d37;
+  --jaune: #f5d61b;
+  --blanc: #ffffff;
+  --texte: #e6efec;
+  --texte-doux: #a9c2bb;
+  --trait: #2f5650;
+  --trait-champ: #4f7a72;
+  --lien: #ffa37f;
+  --lien-survol: #ffc4ab;
+  --titre: "Archivo Black", "Arial Black", sans-serif;
+  --largeur-menu: 16.5rem;
+  color-scheme: dark;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 
+html { -webkit-text-size-adjust: 100%; }
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
-  color: #1a1a1a;
-  background: #fff;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--texte);
+  background: var(--sombre);
 }
 
-.lien-evitement { position: absolute; left: -999px; }
-.lien-evitement:focus { left: 1rem; top: 1rem; background: #fff; padding: .5rem; z-index: 10; }
+::selection { background: var(--jaune); color: var(--sombre); }
 
-header.site {
-  background: #fff;
-  border-bottom: 1px solid #ddd;
-  z-index: 5;
+:focus-visible { outline: 2px solid var(--jaune); outline-offset: 3px; }
+
+/* ---------- Typographie ---------- */
+
+h1, h2 {
+  font-family: var(--titre);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: .02em;
+  color: var(--blanc);
 }
 
-/* Menu flottant uniquement sur grand écran : sur mobile il prendrait trop de place */
-@media (min-width: 48rem) {
-  header.site { position: sticky; top: 0; }
-}
+h1 { font-size: clamp(2rem, 1.2rem + 3vw, 2.9rem); line-height: 1.05; margin: 0 0 1.25rem; }
 
-h1 { line-height: 1.2; }
+/* Titre de rubrique souligné d'un trait jaune, comme sur le CV */
+h2 { font-size: 1.35rem; line-height: 1.2; margin: 3rem 0 1.25rem; width: fit-content; max-width: 100%; }
+h2::after { content: ""; display: block; height: 3px; margin-top: .4rem; background: var(--jaune); }
 
-header.site .contenu {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: .5rem 1.5rem;
-  padding-top: .75rem;
-  padding-bottom: .75rem;
-}
+h3 { font-size: 1.2rem; line-height: 1.3; margin: 2rem 0 .5rem; color: var(--blanc); }
 
-header.site .nom { font-weight: 700; text-decoration: none; color: inherit; }
+p, ul, ol { margin: 0 0 1rem; }
+li { margin-bottom: .4rem; }
+/* Les éléments importants ressortent en jaune, la couleur d'accent du CV */
+strong { color: var(--jaune); }
+a strong { color: inherit; }
 
-nav ul { display: flex; flex-wrap: wrap; gap: .25rem 1rem; list-style: none; margin: 0; padding: 0; }
-nav a { display: inline-block; padding: .25rem 0; }
-nav a[aria-current="page"] { font-weight: 700; }
+/* Tout ce qui est cliquable est en pêche (liens, boutons), sauf les rubriques du menu : sans confusion avec les titres (blanc) ni le gras (jaune) */
+a { color: var(--lien); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { color: var(--lien-survol); text-decoration-thickness: 2px; }
 
-.contenu { max-width: 60rem; margin: 0 auto; padding-left: 1rem; padding-right: 1rem; }
-
-main { padding-bottom: 3rem; }
+code { font-size: .95em; background: var(--sombre-fonce); border: 1px solid var(--trait); border-radius: 4px; padding: 0 .3em; }
 
 img { max-width: 100%; height: auto; }
+
 figure { margin: 1.5rem 0; }
-figcaption { font-size: .9rem; color: #555; }
+figure img { display: block; border: 1px solid var(--trait); border-radius: 4px; }
+figcaption { margin-top: .5rem; font-size: .9rem; color: var(--texte-doux); }
 
-table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
-th, td { border: 1px solid #ccc; padding: .5rem; text-align: left; vertical-align: top; }
-.tableau-defilant { overflow-x: auto; }
+/* ---------- Lien d'évitement ---------- */
 
-.carte { border: 1px solid #ddd; padding: 1rem; margin: 1rem 0; }
+.lien-evitement { position: absolute; left: -999px; top: 0; }
+.lien-evitement:focus { left: 1rem; top: 1rem; z-index: 20; background: var(--jaune); color: var(--sombre); padding: .5rem .75rem; border-radius: 4px; font-weight: 700; }
+
+/* ---------- Menu ---------- */
+
+header.site { background: var(--sombre-fonce); }
+
+header.site .entete { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+
+header.site .nom {
+  font-family: var(--titre);
+  font-size: 1.9rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--blanc);
+  text-decoration: none;
+}
+header.site .nom span { color: var(--jaune); }
+header.site .nom:hover { color: var(--blanc); }
+
+header.site .role { margin: .6rem 0 0; font-size: .9rem; color: var(--texte-doux); }
+
+header.site nav ul { list-style: none; margin: 1.5rem 0 0; padding: 0; border-top: 1px solid var(--trait); }
+header.site nav li { margin: 0; }
+header.site nav a {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  padding: .6rem 0;
+  border-bottom: 1px solid var(--trait);
+  color: var(--texte-doux);
+  font-weight: 500;
+  text-decoration: none;
+}
+header.site nav a:hover { color: var(--blanc); }
+header.site nav .num { font-family: var(--titre); font-size: .8rem; color: #6f948b; min-width: 1.4rem; }
+header.site nav a[aria-current="page"] { color: var(--blanc); font-weight: 700; }
+header.site nav a[aria-current="page"] .num { color: var(--jaune); }
+
+header.site .liens { margin: 1.25rem 0 0; font-size: .9rem; color: var(--texte-doux); }
+header.site .liens a { color: var(--lien); }
+header.site .liens a:hover { color: var(--lien-survol); }
+
+/* Bouton pour replier ou ouvrir le menu (affiché seulement si JavaScript est actif) */
+.bouton-menu {
+  display: none;
+  align-items: center;
+  gap: .5rem;
+  min-height: 2.75rem;
+  min-width: 2.75rem;
+  justify-content: center;
+  padding: .5rem;
+  font: inherit;
+  font-weight: 500;
+  color: var(--lien);
+  background: transparent;
+  border: 1px solid var(--lien);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.bouton-menu:hover { border-color: var(--lien-survol); color: var(--lien-survol); }
+.js .bouton-menu { display: inline-flex; }
+.bouton-menu svg { display: none; width: 1.25rem; height: 1.25rem; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.bouton-menu[aria-expanded="false"] .ico-menu { display: block; }
+
+/* ---------- Contenu ---------- */
+
+.contenu { max-width: 54rem; padding: 3rem 2.75rem; }
+main { min-width: 0; }
+main > :first-child { margin-top: 0; }
+
+.bouton {
+  display: inline-block;
+  margin: 0 .6rem .6rem 0;
+  padding: .7rem 1.2rem;
+  border-radius: 4px;
+  font-weight: 700;
+  text-decoration: none;
+  background: var(--lien);
+  color: var(--sombre);
+  border: 2px solid var(--lien);
+}
+.bouton:hover { color: var(--sombre); background: var(--lien-survol); border-color: var(--lien-survol); }
+.bouton + .bouton { background: transparent; color: var(--lien); border-color: var(--lien); }
+.bouton + .bouton:hover { border-color: var(--lien-survol); color: var(--lien-survol); }
+
+.carte { background: var(--sombre-fonce); border: 1px solid var(--trait); border-radius: 4px; padding: 1.1rem 1.25rem; margin: 0 0 1rem; }
 .carte h3 { margin-top: 0; }
+/* Titre de carte cliquable : même style que les autres liens */
+.carte h3 a { text-underline-offset: 5px; }
+.carte p { color: var(--texte-doux); }
+.carte p:last-child { margin-bottom: 0; }
+.carte em { font-style: normal; font-size: .9rem; font-weight: 500; color: var(--jaune); }
 
-.fiche { border: 1px solid #ddd; padding: .5rem 1rem; }
-.fiche dt { font-weight: 700; }
-.fiche dd { margin: 0 0 .5rem 0; }
+/* Projets à la une : le premier projet occupe toute la largeur, les deux suivants se partagent la ligne */
+.grille-projets { display: grid; gap: 1rem; }
+.grille-projets .carte { margin: 0; }
+@media (min-width: 45rem) {
+  .grille-projets { grid-template-columns: 1fr 1fr; }
+  .grille-projets .carte:first-child { grid-column: 1 / -1; }
+  .grille-projets .carte:first-child h3 { font-size: 1.4rem; }
+}
 
-.bouton { display: inline-block; padding: .5rem 1rem; border: 1px solid currentColor; }
+.fiche { margin: 0 0 1rem; padding: 1rem 1.25rem; border: 1px solid var(--trait); border-radius: 4px; }
+.fiche dt { font-weight: 700; color: var(--blanc); }
+.fiche dd { margin: 0 0 .6rem; color: var(--texte-doux); }
+.fiche dd:last-child { margin-bottom: 0; }
+@media (min-width: 45rem) {
+  .fiche { display: grid; grid-template-columns: 9rem 1fr; gap: .5rem 1.25rem; }
+  .fiche dd { margin: 0; }
+}
 
-form p { margin: 0 0 1rem 0; }
-label { display: block; font-weight: 600; }
-input, textarea, select { width: 100%; max-width: 35rem; padding: .5rem; font: inherit; }
-input[type="checkbox"] { width: 1.5rem; height: 1.5rem; vertical-align: middle; }
-button { font: inherit; padding: .75rem 1.25rem; cursor: pointer; }
+.tableau-defilant { overflow-x: auto; margin: 1rem 0; }
+table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+th, td { border: 1px solid var(--trait); padding: .6rem .75rem; text-align: left; vertical-align: top; }
+th { background: var(--sombre-fonce); color: var(--blanc); }
+td { color: var(--texte-doux); }
 
-/* Cibles tactiles assez grandes sur téléphone (au moins 24 px de haut) */
-.bouton { padding: .75rem 1.25rem; margin: 0 .5rem .5rem 0; }
-footer.site a { display: inline-block; padding: .5rem 0; }
+/* ---------- Formulaire ---------- */
 
-/* Repère visuel des contenus à compléter (à retirer avant mise en ligne) */
-.a-completer { background: #fff3b0; }
+form p { margin: 0 0 1.1rem; }
+label { display: block; margin-bottom: .3rem; font-weight: 700; color: var(--blanc); }
+input, textarea, select {
+  width: 100%;
+  max-width: 36rem;
+  padding: .65rem .75rem;
+  font: inherit;
+  color: var(--blanc);
+  background: var(--sombre-fonce);
+  border: 1px solid var(--trait-champ);
+  border-radius: 4px;
+}
+input:focus, textarea:focus, select:focus { border-color: var(--jaune); }
+input[type="checkbox"] { width: 1.4rem; height: 1.4rem; vertical-align: middle; margin-right: .4rem; accent-color: var(--lien); }
+button[type="submit"] {
+  font: inherit;
+  font-weight: 700;
+  padding: .75rem 1.3rem;
+  color: var(--sombre);
+  background: var(--lien);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+button[type="submit"]:hover { background: var(--lien-survol); }
 
-footer.site { border-top: 1px solid #ddd; padding: 1rem 0; font-size: .9rem; }
+/* ---------- Pied de page ---------- */
+
+footer.site { border-top: 1px solid var(--trait); font-size: .9rem; color: var(--texte-doux); }
+footer.site .contenu { padding-top: 1.25rem; padding-bottom: 1.25rem; }
+footer.site p { margin: 0; }
+footer.site a { display: inline-block; padding: .4rem 0; }
+
+/* ---------- Téléphone et tablette : en-tête en haut, menu derrière un bouton ---------- */
+
+@media (max-width: 59.99rem) {
+  header.site { padding: 1rem; border-bottom: 1px solid var(--trait); }
+  header.site .nom { font-size: 1.45rem; }
+  header.site .role { margin-top: .35rem; }
+  header.site .liens { display: none; }
+  .js header.site nav { display: none; }
+  .menu-ouvert header.site nav { display: block; }
+  .bouton-menu[aria-expanded="true"] .ico-croix { display: block; }
+  .contenu { padding: 2rem 1rem; }
+}
+
+/* ---------- Grand écran : colonne de menu à gauche, repliable ---------- */
+
+@media (min-width: 60rem) {
+  body {
+    display: grid;
+    grid-template-columns: var(--largeur-menu) minmax(0, 1fr);
+    grid-template-rows: 1fr auto;
+    min-height: 100vh;
+  }
+  header.site {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.75rem 1.5rem;
+    border-right: 1px solid var(--trait);
+  }
+  main, footer.site { grid-column: 2; }
+  .bouton-menu .libelle { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .bouton-menu[aria-expanded="true"] .ico-chevron { display: block; }
+
+  /* Menu replié : il ne reste qu'une fine colonne avec le bouton pour le rouvrir */
+  .menu-replie body { grid-template-columns: 4.5rem minmax(0, 1fr); }
+  .menu-replie header.site { padding: 1.75rem .8rem; }
+  .menu-replie header.site .nom,
+  .menu-replie header.site .role,
+  .menu-replie header.site nav,
+  .menu-replie header.site .liens { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}

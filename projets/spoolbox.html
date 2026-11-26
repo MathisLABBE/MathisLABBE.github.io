@@ -5,26 +5,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>SpoolBox – application WPF / .NET pour l'atelier de production | Mathis LABBE</title>
   <meta name="description" content="SpoolBox, application C# / WPF développée en alternance chez 3ma group : accès unique aux fichiers de production, recherche, filtres, impression groupée par règles, API web, SQL Server, optimisation des performances.">
+  <meta name="theme-color" content="#16302b">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Roboto:wght@400;500;700&amp;display=swap">
   <link rel="stylesheet" href="../css/style.css">
+  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('menu-replie')==='1')document.documentElement.classList.add('menu-replie')}catch(e){}</script>
+  <script src="../js/menu.js" defer></script>
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
 
   <header class="site">
-    <div class="contenu">
-      <a class="nom" href="../index.html">Mathis LABBE</a>
-      <nav aria-label="Menu principal">
-        <ul>
-          <li><a href="../index.html">Accueil</a></li>
-          <li><a href="../a-propos.html">À propos</a></li>
-          <li><a href="../projets.html" aria-current="page">Projets</a></li>
-          <li><a href="../competences.html">Compétences</a></li>
-          <li><a href="../veille.html">Veille</a></li>
-          <li><a href="../contact.html">Contact</a></li>
-          <li><a href="../cv/CV-Mathis-LABBE.pdf" download>CV (PDF)</a></li>
-        </ul>
-      </nav>
+    <div class="entete">
+      <a class="nom" href="../index.html">Mathis <span>LABBE</span></a>
+      <button class="bouton-menu" type="button" aria-expanded="true" aria-controls="menu-principal">
+        <svg class="ico-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg class="ico-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+        <svg class="ico-croix" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        <span class="libelle">Replier le menu</span>
+      </button>
     </div>
+    <p class="role">Développeur C# / .NET en alternance</p>
+    <nav id="menu-principal" aria-label="Menu principal">
+      <ul>
+          <li><a href="../index.html"><span class="num" aria-hidden="true">01</span>Accueil</a></li>
+          <li><a href="../a-propos.html"><span class="num" aria-hidden="true">02</span>À propos</a></li>
+          <li><a href="../projets.html" aria-current="page"><span class="num" aria-hidden="true">03</span>Projets</a></li>
+          <li><a href="../competences.html"><span class="num" aria-hidden="true">04</span>Compétences</a></li>
+          <li><a href="../veille.html"><span class="num" aria-hidden="true">05</span>Veille</a></li>
+          <li><a href="../contact.html"><span class="num" aria-hidden="true">06</span>Contact</a></li>
+          <li><a href="../cv/CV-Mathis-LABBE.pdf" download><span class="num" aria-hidden="true">07</span>CV (PDF)</a></li>
+      </ul>
+    </nav>
+    <p class="liens"><a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
   </header>
 
   <main id="contenu" class="contenu">
