@@ -5,13 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Mathis LABBE – Développeur C# / .NET en alternance | Portfolio</title>
   <meta name="description" content="Portfolio de Mathis LABBE, étudiant en BUT Informatique et développeur C# / .NET en alternance chez 3ma group. Applications métier WPF, SQL Server, analyse du besoin.">
-  <meta name="theme-color" content="#16302b">
+  <meta name="theme-color" content="#0b0b0c">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&amp;family=Roboto:wght@400;500;700&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&amp;family=Space+Grotesk:wght@400;500;700&amp;family=Syne:wght@700;800&amp;display=swap">
   <link rel="stylesheet" href="css/style.css">
-  <script>document.documentElement.classList.add('js');try{if(localStorage.getItem('menu-replie')==='1')document.documentElement.classList.add('menu-replie')}catch(e){}</script>
+  <script>document.documentElement.classList.add('js')</script>
   <script src="js/menu.js" defer></script>
+  <script src="js/reseau.js" defer></script>
 </head>
 <body>
   <a class="lien-evitement" href="#contenu">Aller au contenu</a>
@@ -19,11 +20,10 @@
   <header class="site">
     <div class="entete">
       <a class="nom" href="index.html">Mathis <span>LABBE</span></a>
-      <button class="bouton-menu" type="button" aria-expanded="true" aria-controls="menu-principal">
+      <button class="bouton-menu" type="button" aria-expanded="false" aria-controls="menu-principal">
         <svg class="ico-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-        <svg class="ico-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
         <svg class="ico-croix" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
-        <span class="libelle">Replier le menu</span>
+        <span class="libelle">Menu</span>
       </button>
     </div>
     <p class="role">Développeur C# / .NET en alternance</p>
@@ -41,54 +41,75 @@
     <p class="liens"><a href="https://github.com/MathisLABBE">GitHub</a> · <a href="https://www.linkedin.com/in/mathis-labbe-92518131b/">LinkedIn</a></p>
   </header>
 
-  <main id="contenu" class="contenu">
+  <main id="contenu">
 
-    <section>
-      <h1>Mathis LABBE</h1>
-      <p><strong>Développeur d'applications en alternance chez 3ma group</strong>, étudiant en 3<sup>e</sup> année de BUT Informatique.</p>
-      <p>Je conçois et développe des <strong>logiciels métier</strong> utilisés par les équipes de production d'un groupe d'impression et de communication : des outils qui regroupent l'information au même endroit pour que chacun trouve vite ce dont il a besoin.</p>
-      <p><strong>Je recherche une poursuite d'études dans une école spécialisée en intelligence artificielle</strong>, de préférence en alternance, à partir de <strong>septembre 2027</strong>.</p>
-      <p>
-        <a class="bouton" href="cv/CV-Mathis-LABBE.pdf" download>Télécharger mon CV (PDF)</a>
-        <a class="bouton" href="contact.html">Me contacter</a>
+    <section class="heros" aria-labelledby="titre-accueil">
+      <canvas id="reseau" aria-hidden="true"></canvas>
+      <div class="heros-texte">
+        <p class="surtitre">Développeur C# / .NET en alternance · 3ma group · BUT Informatique</p>
+        <h1 class="geant" id="titre-accueil">Mathis<br>Labbe</h1>
+        <p class="accroche">Je conçois des logiciels métier utilisés chaque jour par les équipes de production. <strong>Prochaine étape : une école spécialisée en intelligence artificielle</strong>, de préférence en alternance, dès septembre 2027.</p>
+        <p>
+          <a class="bouton" href="cv/CV-Mathis-LABBE.pdf" download>Télécharger mon CV (PDF)</a><a class="bouton" href="contact.html">Me contacter</a>
+        </p>
+      </div>
+      <p class="legende-reseau" aria-live="off">
+        En fond, un réseau de neurones que j'ai codé <b>sans bibliothèque</b> apprend en direct, dans votre navigateur, à séparer deux spirales.<br>
+        Époque <b id="reseau-epoque">0</b> · perte <b id="reseau-perte">–</b> · <b id="reseau-points">0</b> points<br>
+        Cliquez sur le fond pour lui ajouter un point à apprendre.<br>
+        <button type="button" id="reseau-relancer">Recommencer l'apprentissage</button>
       </p>
     </section>
 
-    <section>
+    <div class="defilant" aria-hidden="true">
+      <div><span>C#</span><i>/</i><span>.NET 10</span><i>/</i><span>WPF</span><i>/</i><span>SQL Server</span><i>/</i><span>Azure DevOps</span><i>/</i><span>Scrum</span><i>/</i><span>Python</span><i>/</i><span>Réseaux de neurones</span><i>/</i><span>C#</span><i>/</i><span>.NET 10</span><i>/</i><span>WPF</span><i>/</i><span>SQL Server</span><i>/</i><span>Azure DevOps</span><i>/</i><span>Scrum</span><i>/</i><span>Python</span><i>/</i><span>Réseaux de neurones</span><i>/</i></div>
+    </div>
+
+    <section class="section-accueil">
       <h2>Projets à la une</h2>
       <p>Une sélection de mes réalisations, de l'analyse du besoin jusqu'au code. Chaque fiche détaille le contexte, mon rôle, les technologies et les difficultés rencontrées.</p>
-
-      <div class="grille-projets">
-      <article class="carte">
-        <h3><a href="projets/spoolbox.html">SpoolBox – le portail des fichiers de production</a></h3>
-        <p>Application de bureau, en production et utilisée par l'atelier, qui donne aux opérateurs un accès unique aux fichiers et aux informations nécessaires pour lancer une production.</p>
-        <p><em>Alternance · 2026 · C#, WPF, SQL Server</em></p>
-      </article>
-
-      <article class="carte">
-        <h3><a href="projets/sirene.html">Sirene – une plateforme commune de notifications</a></h3>
-        <p>Dans le rôle de Product Owner, conception d'un service qui centralise les alertes de toutes les applications internes, pour que chacun reçoive la bonne information au bon endroit.</p>
-        <p><em>Alternance · 2026 · Vision produit, analyse du besoin, modélisation de données</em></p>
-      </article>
-
-      <article class="carte">
-        <h3><a href="projets/projet-ia.html">Un réseau de neurones codé sans bibliothèque</a></h3>
-        <p>Pour comprendre comment une IA apprend, j'ai programmé un réseau de neurones de A à Z, avec son entraînement et sa visualisation à l'écran.</p>
-        <p><em>Projet personnel · 2026 · C#, WPF</em></p>
-      </article>
+      <div class="liste-projets">
+        <a class="ligne-projet" href="projets/spoolbox.html">
+          <span class="num">01</span>
+          <span class="titre">SpoolBox</span>
+          <span class="fleche" aria-hidden="true">→</span>
+          <span class="desc">Le portail des fichiers de production, en service à l'atelier depuis juillet 2026.</span>
+          <span class="meta">Alternance · 2026 · C#, WPF, SQL Server</span>
+        </a>
+        <a class="ligne-projet" href="projets/sirene.html">
+          <span class="num">02</span>
+          <span class="titre">Sirene</span>
+          <span class="fleche" aria-hidden="true">→</span>
+          <span class="desc">Une plateforme commune de notifications, conçue dans le rôle de Product Owner.</span>
+          <span class="meta">Alternance · 2026 · Vision produit, analyse du besoin, modélisation de données</span>
+        </a>
+        <a class="ligne-projet" href="projets/projet-ia.html">
+          <span class="num">03</span>
+          <span class="titre">Réseau de neurones</span>
+          <span class="fleche" aria-hidden="true">→</span>
+          <span class="desc">Codé de A à Z sans bibliothèque, pour comprendre comment une IA apprend.</span>
+          <span class="meta">Projet personnel · 2026 · C#, WPF</span>
+        </a>
       </div>
-
-      <p><a href="projets.html">Voir tous les projets</a></p>
+      <a class="tous-projets" href="projets.html">Voir tous les projets →</a>
     </section>
 
-    <section>
-      <h2>En bref</h2>
-      <ul>
-        <li><strong>Formation</strong> : BUT Informatique, en alternance depuis septembre 2025.</li>
-        <li><strong>Entreprise</strong> : 3ma group, équipe Desktop (applications de bureau).</li>
-        <li><strong>Technologies principales</strong> : C#, .NET, WPF, SQL Server, Git / Azure DevOps.</li>
-        <li><strong>Veille</strong> : l'écosystème .NET – <a href="veille.html">lire mes articles</a>.</li>
-      </ul>
+    <section class="section-accueil">
+      <h2>Parcours</h2>
+      <ol class="parcours">
+        <li><span class="date">Septembre 2025</span><span class="quoi">Début de l'alternance chez 3ma group, dans l'équipe Desktop (applications de bureau), en parallèle du BUT Informatique.</span></li>
+        <li><span class="date">Février 2026</span><span class="quoi">Je démarre SpoolBox, dont je suis le développeur.</span></li>
+        <li><span class="date">Mars – mai 2026</span><span class="quoi">Je code un réseau de neurones sans bibliothèque, sur mon temps libre.</span></li>
+        <li><span class="date">Juillet 2026</span><span class="quoi">SpoolBox passe en production : l'atelier l'utilise chaque jour.</span></li>
+        <li><span class="date">Septembre 2026</span><span class="quoi">Je prends le rôle de Product Owner pour concevoir Sirene.</span></li>
+        <li class="avenir"><span class="date">Septembre 2027</span><span class="quoi">Une école spécialisée en intelligence artificielle, de préférence en alternance.</span></li>
+      </ol>
+      <p>Au quotidien : C#, .NET, WPF, SQL Server, Git et Azure DevOps. Je suis l'actualité de l'écosystème .NET : <a href="veille.html">lire ma veille</a>.</p>
+    </section>
+
+    <section class="appel">
+      <p>Une école, une alternance, une question sur un projet ?</p>
+      <a href="contact.html">Écrivez-moi →</a>
     </section>
 
   </main>

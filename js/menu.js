@@ -1,53 +1,63 @@
-/* Menu repliable.
-   Grand écran : le bouton replie la colonne de menu ; le choix est retenu d'une page à l'autre.
-   Téléphone : le menu est fermé par défaut et s'ouvre avec le bouton « Menu ». */
+/* Menu plein écran et apparition des blocs au défilement. */
 (function () {
   var racine = document.documentElement;
   var bouton = document.querySelector('.bouton-menu');
-  if (!bouton) return;
 
-  var libelle = bouton.querySelector('.libelle');
-  var grandEcran = window.matchMedia('(min-width: 60rem)');
+  /* ---------- Menu plein écran ---------- */
+  if (bouton) {
+    var libelle = bouton.querySelector('.libelle');
+    var menu = document.getElementById('menu-principal');
 
-  function estOuvert() {
-    return grandEcran.matches
-      ? !racine.classList.contains('menu-replie')
-      : racine.classList.contains('menu-ouvert');
-  }
-
-  function mettreAJour() {
-    var ouvert = estOuvert();
-    bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
-    if (grandEcran.matches) {
-      libelle.textContent = ouvert ? 'Replier le menu' : 'Afficher le menu';
-    } else {
+    function ouvrir(ouvert) {
+      racine.classList.toggle('menu-ouvert', ouvert);
+      bouton.setAttribute('aria-expanded', ouvert ? 'true' : 'false');
       libelle.textContent = ouvert ? 'Fermer' : 'Menu';
+      if (ouvert && menu) {
+        var premier = menu.querySelector('a');
+        if (premier) premier.focus();
+      }
     }
+
+    bouton.addEventListener('click', function () {
+      var ouvert = !racine.classList.contains('menu-ouvert');
+      ouvrir(ouvert);
+      if (!ouvert) bouton.focus();
+    });
+
+    document.addEventListener('keydown', function (ev) {
+      if (ev.key === 'Escape' && racine.classList.contains('menu-ouvert')) {
+        ouvrir(false);
+        bouton.focus();
+      }
+    });
+
+    ouvrir(false);
   }
 
-  bouton.addEventListener('click', function () {
-    if (grandEcran.matches) {
-      var replie = racine.classList.toggle('menu-replie');
-      try { localStorage.setItem('menu-replie', replie ? '1' : '0'); } catch (e) { /* stockage indisponible : tant pis */ }
-    } else {
-      racine.classList.toggle('menu-ouvert');
-    }
-    mettreAJour();
-  });
+  /* ---------- Barre du haut : fond plein dès qu'on a défilé ---------- */
+  function majDefilement() { racine.classList.toggle('a-defile', window.scrollY > 40); }
+  window.addEventListener('scroll', majDefilement, { passive: true });
+  majDefilement();
 
-  // Échap referme le menu ouvert sur téléphone
-  document.addEventListener('keydown', function (evenement) {
-    if (evenement.key === 'Escape' && !grandEcran.matches && racine.classList.contains('menu-ouvert')) {
-      racine.classList.remove('menu-ouvert');
-      mettreAJour();
-      bouton.focus();
-    }
-  });
+  /* ---------- Apparition des blocs au défilement ---------- */
+  var mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (mouvementReduit || !('IntersectionObserver' in window)) return;
 
-  if (grandEcran.addEventListener) {
-    grandEcran.addEventListener('change', mettreAJour);
-  } else {
-    grandEcran.addListener(mettreAJour);
-  }
-  mettreAJour();
+  var blocs = document.querySelectorAll('main > :not(.heros), main section > *, .ligne-projet, .parcours li');
+  if (!blocs.length) return;
+  racine.classList.add('animations');
+
+  var observateur = new IntersectionObserver(function (entrees) {
+    entrees.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observateur.unobserve(e.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -8% 0px' });
+
+  blocs.forEach(function (bloc) {
+    bloc.classList.add('revele');
+    observateur.observe(bloc);
+  });
 })();
