@@ -322,6 +322,9 @@ footer.site a { display: inline-block; padding: .4rem 0; }
 .legende-reseau .legende-stats { color: var(--os); }
 .legende-reseau .legende-jalon { color: var(--acide); }
 .legende-reseau .legende-note { font-size: .68rem; color: var(--os-doux); }
+.legende-reseau .pedale { margin-left: .4rem; padding: 0 .35rem; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+.legende-reseau .pedale.frein { color: #fff; background: #d42a2a; }
+.legende-reseau .pedale.gaz { color: var(--noir); background: var(--acide); }
 .legende-reseau .legende-jalon:empty { display: none; }
 .legende-reseau b { color: var(--os); font-weight: 500; }
 .legende-reseau button {
