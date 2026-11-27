@@ -262,6 +262,9 @@
   var infoVitesse = document.getElementById('voitures-vitesse');
   var infoPedale = document.getElementById('voitures-pedale');
   var boutonRelancer = document.getElementById('voitures-relancer');
+  var boutonRalentir = document.getElementById('voitures-ralentir');
+  var boutonAccelerer = document.getElementById('voitures-accelerer');
+  var infoMultiplicateur = document.getElementById('voitures-multiplicateur');
 
   var largeur = 0, hauteur = 0, dpr = 1, sim = null, circuit = null, fond = null;
 
@@ -386,9 +389,11 @@
 
   // Toujours 100 pas de simulation par seconde, quel que soit l'écran : la course garde la même allure
   var enCours = false, visible = true, dernier = 0, precedent = 0, reserve = 0;
+  // Vitesse de simulation réglable par le visiteur : le chrono reste en temps de course, il ne change pas
+  var VITESSES = [0.25, 0.5, 1, 2, 4, 8], niveau = 2;
   function boucle(maintenant) {
     if (!enCours) return;
-    if (precedent) reserve += Math.min(maintenant - precedent, 100) * PAS_PAR_SECONDE / 1000;
+    if (precedent) reserve += Math.min(maintenant - precedent, 100) * PAS_PAR_SECONDE * VITESSES[niveau] / 1000;
     precedent = maintenant;
     while (reserve >= 1) {
       reserve -= 1;
@@ -448,6 +453,18 @@
   });
 
   if (boutonRelancer) boutonRelancer.addEventListener('click', function () { arreter(); initialiser(); });
+
+  function majVitesse() {
+    var m = VITESSES[niveau];
+    if (infoMultiplicateur) infoMultiplicateur.textContent = '×' + String(m).replace('.', ',');
+    if (boutonRalentir) boutonRalentir.disabled = niveau === 0;
+    if (boutonAccelerer) boutonAccelerer.disabled = niveau === VITESSES.length - 1;
+  }
+  if (boutonRalentir) boutonRalentir.addEventListener('click', function () { niveau = Math.max(0, niveau - 1); majVitesse(); });
+  if (boutonAccelerer) boutonAccelerer.addEventListener('click', function () { niveau = Math.min(VITESSES.length - 1, niveau + 1); majVitesse(); });
+  // Sans animation, la simulation ne tourne pas : les boutons n'ont pas d'effet
+  if (mouvementReduit && boutonRalentir) boutonRalentir.parentNode.hidden = true;
+  majVitesse();
 
   initialiser();
 })();

@@ -337,6 +337,10 @@ footer.site a { display: inline-block; padding: .4rem 0; }
   cursor: pointer;
 }
 .legende-reseau button:hover { background: var(--acide); color: var(--noir); }
+.legende-reseau .legende-vitesse { display: flex; align-items: center; gap: .5rem; margin: .4rem 0 0; color: var(--os); }
+.legende-reseau .legende-vitesse button { margin: 0; min-width: 2.25rem; min-height: 2.25rem; padding: 0; font-size: 1rem; line-height: 1; }
+.legende-reseau .legende-vitesse button:disabled { opacity: .35; cursor: default; background: none; color: var(--acide); }
+.legende-reseau .legende-vitesse b { min-width: 2.6rem; text-align: center; }
 
 /* Bandeau qui défile */
 .defilant { border-block: 1px solid var(--trait); overflow: hidden; white-space: nowrap; padding: 1.1rem 0; }
