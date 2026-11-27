@@ -13,8 +13,8 @@
   var SPA = [384,217,271,20,269,11,274,4,285,0,297,3,334,22,425,65,468,92,514,125,554,159,587,194,760,399,772,411,793,424,830,448,847,464,861,486,870,506,875,528,880,569,883,584,888,597,898,615,984,751,1038,838,1053,870,1063,894,1074,932,1143,1170,1248,1530,1272,1616,1273,1630,1271,1646,1262,1658,1250,1669,1235,1677,1225,1686,1219,1696,1214,1712,1215,1728,1236,1821,1235,1837,1232,1852,1221,1868,1207,1879,968,2043,953,2049,938,2050,922,2045,909,2036,900,2022,896,2009,895,1994,900,1981,908,1966,920,1957,1025,1893,1036,1881,1042,1870,1045,1856,1044,1839,1000,1713,987,1662,956,1503,941,1411,938,1396,930,1379,920,1366,905,1351,888,1340,870,1333,851,1330,788,1325,764,1328,742,1334,720,1344,702,1356,681,1375,668,1394,653,1422,594,1569,541,1700,530,1720,516,1734,498,1744,479,1750,462,1750,445,1747,430,1740,406,1724,390,1717,371,1714,351,1716,334,1722,318,1733,309,1744,297,1761,200,1912,191,1921,179,1927,164,1930,149,1929,135,1923,69,1875,31,1847,21,1835,11,1820,5,1805,1,1788,0,1770,3,1749,10,1730,18,1707,31,1671,54,1631,79,1596,117,1554,180,1493,217,1465,248,1446,410,1362,433,1348,456,1331,476,1311,494,1290,510,1269,532,1229,550,1190,590,1101,597,1081,601,1061,602,1035,598,1011,574,950,548,883,517,799,509,768,501,731,496,696,493,667,484,532,486,523,491,517,500,515,514,517,529,517,539,515,546,508,547,499,543,488,491,404];
 
   /* ==================== Le réseau de neurones ==================== */
-  // 6 entrées (5 capteurs + vitesse), 8 neurones cachés, 3 sorties (volant, accélérateur, frein), activation tanh.
-  var TAILLES = [6, 8, 3];
+  // 7 entrées (5 capteurs, vitesse, angle du volant), 8 neurones cachés, 3 sorties (volant, accélérateur, frein), activation tanh.
+  var TAILLES = [7, 8, 3];
   var NB_POIDS = 0, INIT = 0.25, FORCE = 0.5;
   for (var t = 0; t < TAILLES.length - 1; t++) NB_POIDS += (TAILLES[t] + 1) * TAILLES[t + 1];
 
@@ -110,8 +110,25 @@
   // durée maximale d'une génération et progrès minimal exigé (sinon la voiture est arrêtée).
   // L'adhérence limite le virage selon la vitesse : trop vite, la voiture dérape. Pour passer La Source
   // ou le Bus Stop, il faut freiner avant.
-  var R = { vmin: 0.8, vmax: 3, accel: 0.035, frein: 0.11, frottement: 0.998, frottementDerapage: 0.985, braquage: 0.1, adherence: 0.1,
-            demi: 0.017, duree: 3600, progresMin: 0.02, patience: 100 };
+  // Unités : pixels et pas de simulation, pour un circuit de 700 px de large.
+  var R = {
+    vmax: 3,             // vitesse de pointe visée (sert à l'échelle du chrono : 340 km/h)
+    vmin: 0.8,           // vitesse au ralenti
+    motricite: 0.05,     // accélération maximale à bas régime
+    puissance: 0.114,    // puissance du moteur : vitesse de pointe ≈ 3 avec la traînée ci-dessous
+    trainee: 0.004,      // résistance de l'air, proportionnelle au carré de la vitesse
+    roulement: 0.002,    // résistance au roulement
+    freinMax: 0.12,      // décélération maximale au freinage
+    volantMax: 0.5,      // angle maximal des roues (environ 29°)
+    vitesseVolant: 0.04, // le volant tourne progressivement
+    directionVitesse: 0.5, // réduit l'angle maximal des roues quand la vitesse augmente
+    vitessePedale: 0.08, // les pédales s'enfoncent progressivement
+    empattement: 4,      // distance entre les essieux
+    adherence: 0.1,      // glissade maximale que les pneus peuvent annuler à chaque pas
+    appui: 0.15,         // appui aérodynamique : l'adhérence augmente avec le carré de la vitesse
+    frottementDerapage: 0.985,
+    demi: 0.017, duree: 3600, progresMin: 0.02, patience: 100
+  };
   var PAS_PAR_SECONDE = 150;      // à l'écran : 150 pas de simulation par seconde, toujours
 
   function Simulation(circuit, nbVoitures) {
@@ -136,7 +153,7 @@
   Simulation.prototype.demarrer = function () {
     var p0 = this.circuit.pts[0], cap = Math.atan2(p0.dy, p0.dx), s = this.s;
     this.voitures = this.cerveaux.map(function (w) {
-      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * s, vx: Math.cos(cap) * 1.2 * s, vy: Math.sin(cap) * 1.2 * s, derapage: 0, gaz: 0, frein: 0, indice: 0, tours: 0, toursMax: 0, progression: 0,
+      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * s, vx: Math.cos(cap) * 1.2 * s, vy: Math.sin(cap) * 1.2 * s, derapage: 0, gaz: 0, frein: 0, volant: 0, capPrecedent: cap, indice: 0, tours: 0, toursMax: 0, progression: 0,
                vivante: true, meilleurePrg: 0, repere: 0, depuisProgres: 0, debutTour: 0, fin: 0, score: 0, capteurs: [0, 0, 0, 0, 0] };
     });
     this.temps = 0;
@@ -157,7 +174,7 @@
     }
   };
 
-  var entrees = new Float64Array(6);
+  var entrees = new Float64Array(7);
   Simulation.prototype.pas = function () {
     var c = this.circuit, N = c.N, s = this.s, vivantes = 0;
     this.temps++;
@@ -167,22 +184,46 @@
       this.mesurer(v);
       for (var k = 0; k < 5; k++) entrees[k] = 1 - v.capteurs[k] / this.portee;
       entrees[5] = v.v / (R.vmax * s);
+      entrees[6] = v.volant / R.volantMax;
       var sortie = penser(v.w, entrees);
-      // Pédales de 0 à 1, enfoncées seulement si le réseau le décide : au départ, les voitures roulent
-      // doucement, apprennent d'abord à tourner, puis à accélérer dans les lignes droites et à freiner avant les virages
-      v.gaz = sortie[1] > 0 ? sortie[1] : 0;
-      v.frein = sortie[2] > 0 ? sortie[2] : 0;
-      // Volant : la voiture pivote, mais sa vitesse garde d'abord son ancienne direction
-      v.cap += sortie[0] * R.braquage;
+      // Ce que le réseau demande : un angle de volant et deux pédales, de 0 à 1
+      // Direction plus douce à haute vitesse (comme une vraie direction assistée) : un petit écart de volant
+      // à 300 km/h ne fait pas partir la voiture en travers
+      var volantVise = sortie[0] * R.volantMax / (1 + R.directionVitesse * v.v / s);
+      var gazVise = sortie[1] > 0 ? sortie[1] : 0;
+      var freinVise = sortie[2] > 0 ? sortie[2] : 0;
+      // Comme en vrai, le volant et les pédales ne bougent pas instantanément
+      v.volant += Math.max(-R.vitesseVolant, Math.min(R.vitesseVolant, volantVise - v.volant));
+      v.gaz += Math.max(-R.vitessePedale, Math.min(R.vitessePedale, gazVise - v.gaz));
+      v.frein += Math.max(-R.vitessePedale, Math.min(R.vitessePedale, freinVise - v.frein));
+
       var hx = Math.cos(v.cap), hy = Math.sin(v.cap);
       var avant = v.vx * hx + v.vy * hy;          // vitesse dans l'axe de la voiture
       var cote = -v.vx * hy + v.vy * hx;          // vitesse de travers (glissade)
-      // Pédales : accélérer ou freiner dans l'axe de la voiture
-      avant = avant * R.frottement + (v.gaz * R.accel - v.frein * R.frein) * s;
-      avant = Math.max(R.vmin * s, Math.min(R.vmax * s, avant));
-      // Adhérence : les pneus annulent la glissade, mais seulement jusqu'à une certaine limite.
-      // Freiner en tournant use une partie de l'adhérence (cercle de frottement). Au-delà : dérapage.
-      var adherence = R.adherence * s * (1 - 0.5 * v.frein);
+      var u = Math.max(avant, 0.01 * s) / s;      // vitesse ramenée à un circuit de 700 px
+
+      // Moteur : à bas régime, il pousse fort (limité par la motricité) ; plus la voiture va vite,
+      // plus la puissance se répartit sur la vitesse, et la traînée de l'air, qui croît comme le carré
+      // de la vitesse, finit par l'équilibrer : la vitesse de pointe vient d'elle-même.
+      var poussee = v.gaz * Math.min(R.motricite, R.puissance / u);
+      var freinage = v.frein * R.freinMax;
+      var trainee = R.trainee * u * u + R.roulement;
+      avant += (poussee - freinage - trainee) * s;
+      avant = Math.max(R.vmin * s, avant);         // au ralenti, la voiture avance encore doucement
+
+      // Direction : la voiture pivote selon l'angle des roues et sa vitesse (empattement fixe)
+      v.cap += avant * Math.tan(v.volant) / (R.empattement * s);
+      hx = Math.cos(v.cap); hy = Math.sin(v.cap);
+      // La vitesse garde d'abord son ancienne direction : ce décalage devient de la glissade
+      var ancienAvant = avant;
+      avant = ancienAvant * Math.cos(v.cap - v.capPrecedent) + cote * Math.sin(v.cap - v.capPrecedent);
+      cote = cote * Math.cos(v.cap - v.capPrecedent) - ancienAvant * Math.sin(v.cap - v.capPrecedent);
+      v.capPrecedent = v.cap;
+
+      // Adhérence : les pneus annulent la glissade, mais seulement jusqu'à une limite.
+      // Freiner ou accélérer fort en tournant en use une partie (cercle de frottement). Au-delà : dérapage.
+      // L'appui aérodynamique plaque la voiture au sol : plus elle va vite, plus elle adhère
+      var adherence = R.adherence * s * (1 + R.appui * u * u) * Math.max(0.3, 1 - 0.6 * v.frein - 0.3 * v.gaz * (u < 1.5 ? 1 : 0));
       if (Math.abs(cote) <= adherence) { cote = 0; v.derapage = 0; }
       else {
         cote -= (cote > 0 ? 1 : -1) * adherence;
@@ -333,7 +374,7 @@
     var taille = Math.max(2.5, circuit.demi * 0.45), r = Math.max(0.8, taille * 0.3);
     for (var i = 0; i < sim.voitures.length; i++) {
       var v = sim.voitures[i];
-      if (!v.vivante || v.derapage < 0.05) continue;
+      if (!v.vivante || v.derapage < 0.2) continue;
       var hx = Math.cos(v.cap), hy = Math.sin(v.cap);
       fondCtx.fillStyle = 'rgba(205, 205, 215, ' + Math.min(0.35, 0.1 + v.derapage) + ')';
       for (var cote = -1; cote <= 1; cote += 2) {
@@ -411,7 +452,7 @@
   function majCompteur() {
     var m = sim.meneuse();
     if (infoVitesse) infoVitesse.textContent = m ? Math.round(m.v / (R.vmax * sim.s) * 340) + ' km/h' : '—';
-    var pedale = !m ? '' : m.derapage > 0.05 ? 'derapage' : m.frein > 0.2 ? 'frein' : m.gaz > 0.5 ? 'gaz' : '';
+    var pedale = !m ? '' : m.derapage > 0.2 ? 'derapage' : m.frein > 0.2 ? 'frein' : m.gaz > 0.5 ? 'gaz' : '';
     if (infoPedale && pedale !== dernierePedale) {
       infoPedale.textContent = { derapage: 'Dérapage', frein: 'Freinage', gaz: 'Accélération' }[pedale] || '';
       infoPedale.className = 'pedale ' + pedale;
