@@ -443,7 +443,7 @@
   function majTextes() {
     if (infoGen) infoGen.textContent = sim.generation;
     if (infoRecord) infoRecord.textContent = sim.record >= 1 ? 'tour complet' : Math.round(sim.record * 100) + ' %';
-    if (infoTour) infoTour.textContent = sim.meilleurTour ? chrono(sim.meilleurTour) + ' (génération ' + sim.genMeilleurTour + ')' : '—';
+    if (infoTour) infoTour.textContent = sim.meilleurTour ? chrono(sim.meilleurTour) : '—';
     if (infoJalon) infoJalon.textContent = sim.tourComplet ? 'Premier tour complet à la génération ' + sim.tourComplet + '.' : '';
   }
 
@@ -537,7 +537,7 @@
   if (boutonRalentir) boutonRalentir.addEventListener('click', function () { niveau = Math.max(0, niveau - 1); majVitesse(); });
   if (boutonAccelerer) boutonAccelerer.addEventListener('click', function () { niveau = Math.min(VITESSES.length - 1, niveau + 1); majVitesse(); });
   // Sans animation, la simulation ne tourne pas : les boutons n'ont pas d'effet
-  if (mouvementReduit && boutonRalentir) boutonRalentir.parentNode.hidden = true;
+  if (mouvementReduit) [boutonRalentir, boutonAccelerer, infoMultiplicateur].forEach(function (el) { if (el) el.hidden = true; });
   majVitesse();
 
   initialiser();

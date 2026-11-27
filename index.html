@@ -54,17 +54,21 @@
         </p>
       </div>
       <div class="legende-reseau">
-        <p class="legende-titre">Des voitures qui apprennent à conduire</p>
-        <p>Sur le vrai tracé de Spa-Francorchamps, chaque voiture est pilotée par un petit <b>réseau de neurones</b> codé sans bibliothèque. Elle ne voit que les bords (traits verts) et sa vitesse. Trop vite en virage, elle dérape. Les meilleures de chaque génération sont gardées et légèrement modifiées.</p>
-        <p class="legende-stats">Génération <b id="voitures-generation">1</b> · record : <b id="voitures-record">0 %</b> · en tête : <b id="voitures-vitesse">—</b> <span id="voitures-pedale" class="pedale"></span></p>
-        <p class="legende-stats">Meilleur tour : <b id="voitures-tour">—</b><br><span class="legende-note">à l'échelle du vrai circuit : 7 km, 340 km/h en pointe</span></p>
+        <p class="legende-titre">Des voitures qui apprennent Spa</p>
+        <p class="legende-stats">Génération <b id="voitures-generation">1</b> · record <b id="voitures-record">0 %</b><br>Meilleur tour : <b id="voitures-tour">—</b></p>
+        <p class="legende-stats">En tête : <b id="voitures-vitesse">—</b> <span id="voitures-pedale" class="pedale"></span></p>
         <p class="legende-jalon" id="voitures-jalon"></p>
-        <p class="legende-vitesse">Vitesse de simulation
+        <div class="legende-commandes">
           <button type="button" id="voitures-ralentir" aria-label="Ralentir la simulation">−</button>
           <b id="voitures-multiplicateur" aria-live="polite">×1</b>
           <button type="button" id="voitures-accelerer" aria-label="Accélérer la simulation">+</button>
-        </p>
-        <button type="button" id="voitures-relancer">Recommencer à zéro</button>
+          <button type="button" id="voitures-relancer" class="relancer">Recommencer</button>
+        </div>
+        <details class="legende-details">
+          <summary>Comment ça marche ?</summary>
+          <p>Sur le vrai tracé de Spa-Francorchamps, chaque voiture est pilotée par un petit <b>réseau de neurones</b> codé sans bibliothèque. Elle ne voit que les bords (traits verts) et sa vitesse, et choisit de tourner, d'accélérer ou de freiner. Trop vite en virage, elle dérape. Les meilleures de chaque génération sont gardées et légèrement modifiées.</p>
+          <p class="legende-note">Chrono et vitesse à l'échelle du vrai circuit : 7 km, 340 km/h en pointe. Les boutons − et + changent la vitesse de la simulation.</p>
+        </details>
       </div>
     </section>
 
