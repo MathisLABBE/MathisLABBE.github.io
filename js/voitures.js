@@ -1,14 +1,20 @@
-/* Accueil : des voitures qui apprennent à conduire (neuroévolution), codé sans bibliothèque.
+/* Accueil : des voitures qui apprennent à piloter sur le circuit de Spa-Francorchamps (neuroévolution),
+   codé sans bibliothèque.
    Chaque voiture est pilotée par un petit réseau de neurones. Elle ne « voit » que la distance aux bords
-   du circuit, mesurée par 5 capteurs. Au départ, les réseaux sont tirés au hasard : les voitures foncent
-   dans les murs. À la fin de chaque génération, les meilleures sont gardées et copiées avec de petites
-   modifications. Après quelques générations, elles bouclent le circuit. */
+   de la piste, mesurée par 5 capteurs, et sa propre vitesse. Elle décide seulement de tourner et
+   d'accélérer ou de freiner. Au départ, les réseaux sont presque vides : les voitures filent tout droit
+   et ratent La Source. À la fin de chaque génération, les meilleures sont gardées et copiées avec
+   de petites modifications. Elles finissent par boucler le tour, puis par le boucler de plus en plus vite. */
 (function () {
 
+  /* ==================== Le tracé de Spa-Francorchamps ==================== */
+  // Tracé réel (axe de la piste, 7 km), en mètres : x vers l'est, y vers le sud.
+  // Source : projet libre « f1-circuits » (github.com/bacinger/f1-circuits), d'après OpenStreetMap.
+  var SPA = [384,217,271,20,269,11,274,4,285,0,297,3,334,22,425,65,468,92,514,125,554,159,587,194,760,399,772,411,793,424,830,448,847,464,861,486,870,506,875,528,880,569,883,584,888,597,898,615,984,751,1038,838,1053,870,1063,894,1074,932,1143,1170,1248,1530,1272,1616,1273,1630,1271,1646,1262,1658,1250,1669,1235,1677,1225,1686,1219,1696,1214,1712,1215,1728,1236,1821,1235,1837,1232,1852,1221,1868,1207,1879,968,2043,953,2049,938,2050,922,2045,909,2036,900,2022,896,2009,895,1994,900,1981,908,1966,920,1957,1025,1893,1036,1881,1042,1870,1045,1856,1044,1839,1000,1713,987,1662,956,1503,941,1411,938,1396,930,1379,920,1366,905,1351,888,1340,870,1333,851,1330,788,1325,764,1328,742,1334,720,1344,702,1356,681,1375,668,1394,653,1422,594,1569,541,1700,530,1720,516,1734,498,1744,479,1750,462,1750,445,1747,430,1740,406,1724,390,1717,371,1714,351,1716,334,1722,318,1733,309,1744,297,1761,200,1912,191,1921,179,1927,164,1930,149,1929,135,1923,69,1875,31,1847,21,1835,11,1820,5,1805,1,1788,0,1770,3,1749,10,1730,18,1707,31,1671,54,1631,79,1596,117,1554,180,1493,217,1465,248,1446,410,1362,433,1348,456,1331,476,1311,494,1290,510,1269,532,1229,550,1190,590,1101,597,1081,601,1061,602,1035,598,1011,574,950,548,883,517,799,509,768,501,731,496,696,493,667,484,532,486,523,491,517,500,515,514,517,529,517,539,515,546,508,547,499,543,488,491,404];
+
   /* ==================== Le réseau de neurones ==================== */
-  // 5 entrées (les capteurs), 8 neurones cachés, 1 sortie (le volant), activation tanh.
-  // La vitesse est la même pour toutes les voitures : seul le pilotage s'apprend.
-  var TAILLES = [5, 8, 1];
+  // 6 entrées (5 capteurs + vitesse), 8 neurones cachés, 2 sorties (volant, accélérateur), activation tanh.
+  var TAILLES = [6, 8, 2];
   var NB_POIDS = 0, INIT = 0.25, FORCE = 0.5;
   for (var t = 0; t < TAILLES.length - 1; t++) NB_POIDS += (TAILLES[t] + 1) * TAILLES[t + 1];
 
@@ -45,23 +51,43 @@
     return tampons[TAILLES.length - 1];
   }
 
-  /* ==================== Le circuit ==================== */
+  /* ==================== Le circuit à l'écran ==================== */
 
-  function creerCircuit(cx, cy, rx, ry, demiLargeur) {
-    var N = 220, pts = [];
-    for (var i = 0; i < N; i++) {
-      var a = i / N * Math.PI * 2;
-      var r = 1 + 0.2 * Math.sin(2 * a + 0.6) + 0.14 * Math.sin(3 * a + 2.1) + 0.1 * Math.sin(5 * a + 0.3);
-      pts.push({ x: cx + Math.cos(a) * rx * r, y: cy + Math.sin(a) * ry * r });
+  // Place le tracé dans un cadre (en pixels), couché sur le côté pour mieux remplir l'écran,
+  // puis le redécoupe en petits segments réguliers et adoucit les angles.
+  function creerCircuit(cadre, couche) {
+    var brut = [], i;
+    for (i = 0; i < SPA.length; i += 2) brut.push(couche ? [-SPA[i + 1], SPA[i]] : [SPA[i], SPA[i + 1]]);
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    brut.forEach(function (p) { minX = Math.min(minX, p[0]); maxX = Math.max(maxX, p[0]); minY = Math.min(minY, p[1]); maxY = Math.max(maxY, p[1]); });
+    var echellePx = Math.min(cadre.l / (maxX - minX), cadre.h / (maxY - minY));
+    var dx = cadre.x + (cadre.l - (maxX - minX) * echellePx) / 2, dy = cadre.y + (cadre.h - (maxY - minY) * echellePx) / 2;
+    brut = brut.map(function (p) { return [dx + (p[0] - minX) * echellePx, dy + (p[1] - minY) * echellePx]; });
+
+    // Redécoupage tous les 4 pixels
+    var ecart = 4, res = [brut[0].slice()], reste = 0;
+    for (i = 0; i < brut.length; i++) {
+      var a = brut[i], b = brut[(i + 1) % brut.length];
+      var l = Math.hypot(b[0] - a[0], b[1] - a[1]), d = ecart - reste;
+      while (d <= l) { res.push([a[0] + (b[0] - a[0]) * d / l, a[1] + (b[1] - a[1]) * d / l]); d += ecart; }
+      reste = l - (d - ecart);
     }
-    var longueur = 0;
+    res.pop();
+    // Lissage : trois passes de moyenne avec les voisins
+    for (var passe = 0; passe < 3; passe++) {
+      res = res.map(function (p, j) {
+        var g = res[(j - 1 + res.length) % res.length], h = res[(j + 1) % res.length];
+        return [(g[0] + 2 * p[0] + h[0]) / 4, (g[1] + 2 * p[1] + h[1]) / 4];
+      });
+    }
+    var N = res.length, pts = res.map(function (p) { return { x: p[0], y: p[1] }; }), longueur = 0;
     for (i = 0; i < N; i++) {
       var p = pts[i], q = pts[(i + 1) % N];
       p.dx = q.x - p.x; p.dy = q.y - p.y;
-      p.l2 = p.dx * p.dx + p.dy * p.dy;
+      p.l2 = p.dx * p.dx + p.dy * p.dy || 1e-6;
       longueur += Math.sqrt(p.l2);
     }
-    return { pts: pts, N: N, demi: demiLargeur, longueur: longueur };
+    return { pts: pts, N: N, longueur: longueur, taille: Math.max(maxX - minX, maxY - minY) * echellePx };
   }
 
   // Distance au centre de la piste, en cherchant autour du dernier segment connu
@@ -80,33 +106,42 @@
   /* ==================== La simulation ==================== */
 
   var ANGLES_CAPTEURS = [-1.1, -0.5, 0, 0.5, 1.1];
-  var VITESSE = 3.2, BRAQUAGE = 0.05;
+  // Réglages : vitesses (en pixels par pas, pour un circuit de 700 px), volant, largeur de piste,
+  // durée maximale d'une génération et progrès minimal exigé (sinon la voiture est arrêtée).
+  var R = { vmin: 1, vmax: 3, accel: 0.05, braquage: 0.1, demi: 0.017, duree: 3000, progresMin: 0.01 };
+  var PAS_PAR_SECONDE = 150;      // à l'écran : 150 pas de simulation par seconde, toujours
 
-  function Simulation(circuit, nbVoitures, echelle) {
+  function Simulation(circuit, nbVoitures) {
     this.circuit = circuit;
     this.nb = nbVoitures;
-    this.s = echelle;              // taille du circuit : vitesses et capteurs suivent
-    this.portee = 95 * echelle;
+    this.s = circuit.taille / 700;                 // vitesses et capteurs suivent la taille du circuit
+    circuit.demi = Math.max(5, circuit.taille * R.demi);
+    this.portee = 70 * this.s;
+    // Chronomètre à l'échelle du vrai circuit (7 004 m) : la vitesse maximale vaut 340 km/h
+    this.secondesParPas = (R.vmax * this.s * 7004 / circuit.longueur) / (340 / 3.6);
+    this.stagnation = 0;
     this.generation = 1;
     this.record = 0;               // meilleure progression, en fraction de tour
     this.tourComplet = 0;          // génération du premier tour complet
+    this.meilleurTour = 0;         // meilleur temps au tour, en pas de simulation
+    this.genMeilleurTour = 0;
     this.cerveaux = [];
     for (var i = 0; i < nbVoitures; i++) this.cerveaux.push(cerveauAleatoire());
     this.demarrer();
   }
 
   Simulation.prototype.demarrer = function () {
-    var p0 = this.circuit.pts[0], cap = Math.atan2(p0.dy, p0.dx);
+    var p0 = this.circuit.pts[0], cap = Math.atan2(p0.dy, p0.dx), s = this.s;
     this.voitures = this.cerveaux.map(function (w) {
-      return { w: w, x: p0.x, y: p0.y, cap: cap, v: VITESSE * this.s, indice: 0, tours: 0, progression: 0,
-               vivante: true, meilleurePrg: 0, depuisProgres: 0, capteurs: [0, 0, 0, 0, 0] };
-    }, this);
+      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * s, indice: 0, tours: 0, toursMax: 0, progression: 0,
+               vivante: true, meilleurePrg: 0, repere: 0, depuisProgres: 0, debutTour: 0, fin: 0, score: 0, capteurs: [0, 0, 0, 0, 0] };
+    });
     this.temps = 0;
     this.meilleureGen = 0;
   };
 
   Simulation.prototype.mesurer = function (v) {
-    var c = this.circuit, pas = 5 * this.s;
+    var c = this.circuit, pas = 4 * this.s;
     for (var k = 0; k < ANGLES_CAPTEURS.length; k++) {
       var a = v.cap + ANGLES_CAPTEURS[k], cx = Math.cos(a), cy = Math.sin(a), d = 0, indice = v.indice;
       while (d < this.portee) {
@@ -119,49 +154,69 @@
     }
   };
 
-  var entrees = new Float64Array(5);
+  var entrees = new Float64Array(6);
   Simulation.prototype.pas = function () {
-    var c = this.circuit, N = c.N, vivantes = 0;
+    var c = this.circuit, N = c.N, s = this.s, vivantes = 0;
     this.temps++;
     for (var i = 0; i < this.voitures.length; i++) {
       var v = this.voitures[i];
       if (!v.vivante) continue;
       this.mesurer(v);
       for (var k = 0; k < 5; k++) entrees[k] = 1 - v.capteurs[k] / this.portee;
+      entrees[5] = v.v / (R.vmax * s);
       var sortie = penser(v.w, entrees);
-      v.cap += sortie[0] * BRAQUAGE;
+      v.cap += sortie[0] * R.braquage;
+      v.v = Math.max(R.vmin * s, Math.min(R.vmax * s, v.v + sortie[1] * R.accel * s));
       v.x += Math.cos(v.cap) * v.v;
       v.y += Math.sin(v.cap) * v.v;
 
       var l = localiser(c, v.x, v.y, v.indice);
-      if (v.indice > N * 0.8 && l.indice < N * 0.2) v.tours++;
-      else if (v.indice < N * 0.2 && l.indice > N * 0.8) v.tours--;
+      if (v.indice > N * 0.8 && l.indice < N * 0.2) {
+        v.tours++;
+        // Un tour de plus que jamais : on arrête le chronomètre
+        if (v.tours > v.toursMax) {
+          v.toursMax = v.tours;
+          var chrono = this.temps - v.debutTour;
+          if (!this.meilleurTour || chrono < this.meilleurTour) { this.meilleurTour = chrono; this.genMeilleurTour = this.generation; }
+          v.debutTour = this.temps;
+        }
+      } else if (v.indice < N * 0.2 && l.indice > N * 0.8) v.tours--;
       v.indice = l.indice;
       v.progression = v.tours + v.indice / N;
 
-      if (v.progression > v.meilleurePrg + 0.004) { v.meilleurePrg = v.progression; v.depuisProgres = 0; }
+      // Une voiture qui n'avance plus (arrêtée, à contresens, qui tourne en rond) est retirée
+      if (v.progression > v.repere + R.progresMin) { v.repere = v.progression; v.depuisProgres = 0; }
       else v.depuisProgres++;
 
-      if (l.distance > c.demi - 3 * this.s || v.depuisProgres > 140 || v.progression >= 2) v.vivante = false;
+      if (l.distance > c.demi || v.depuisProgres > 150 || v.progression >= 2) { v.vivante = false; v.fin = this.temps; }
       else vivantes++;
+      if (v.progression > v.meilleurePrg) v.meilleurePrg = v.progression;
       if (v.meilleurePrg > this.meilleureGen) this.meilleureGen = v.meilleurePrg;
     }
     if (this.meilleureGen > this.record) this.record = this.meilleureGen;
     if (this.record >= 1 && !this.tourComplet) this.tourComplet = this.generation;
-    return vivantes > 0 && this.temps < 2200;
+    return vivantes > 0 && this.temps < R.duree;
   };
 
-  // Fin de génération : on garde les 2 meilleures telles quelles, les autres sont des copies modifiées
+  // Fin de génération : on classe les voitures (distance parcourue, puis rapidité),
+  // on garde les 2 meilleures telles quelles, les autres sont des copies modifiées des meilleures.
   Simulation.prototype.evoluer = function () {
-    var classees = this.voitures.slice().sort(function (a, b) { return b.meilleurePrg - a.meilleurePrg; });
+    var temps = this.temps;
+    this.voitures.forEach(function (v) {
+      v.score = v.meilleurePrg;
+      if (v.progression >= 2) v.score += 1 - (v.fin || temps) / R.duree; // deux tours : plus c'est rapide, mieux c'est
+    });
+    var classees = this.voitures.slice().sort(function (a, b) { return b.score - a.score; });
     var parents = classees.slice(0, Math.max(2, Math.round(this.nb * 0.25)));
+    // Bloquées au même virage depuis plusieurs générations : on modifie les copies plus franchement
+    if (this.record > (this.recordPrecedent || 0) + 0.01) this.stagnation = 0; else this.stagnation++;
+    this.recordPrecedent = this.record;
+    var force = FORCE * (1 + Math.min(3, this.stagnation / 2));
     var suivants = [classees[0].w, classees[1].w];
     while (suivants.length < this.nb) {
       var p = parents[Math.floor(Math.pow(Math.random(), 1.6) * parents.length)];
-      suivants.push(muter(p.w, 0.2, FORCE));
+      suivants.push(muter(p.w, 0.2, force));
     }
-    // Un peu de hasard pur tant que personne n'a trouvé la bonne direction
-    if (this.record < 0.05) for (var i = 2; i < 6 && i < this.nb; i++) suivants[i] = cerveauAleatoire();
     this.cerveaux = suivants;
     this.generation++;
     this.demarrer();
@@ -176,7 +231,10 @@
     return m;
   };
 
-  window.SimulationVoitures = { Simulation: Simulation, creerCircuit: creerCircuit, reglages: function (v, b, i, f) { VITESSE = v; BRAQUAGE = b; INIT = i; FORCE = f; } };
+  window.SimulationVoitures = {
+    Simulation: Simulation, creerCircuit: creerCircuit, reglages: R,
+    regler: function (o) { for (var k in o) { if (k === 'init') INIT = o[k]; else if (k === 'force') FORCE = o[k]; else R[k] = o[k]; } }
+  };
 
   /* ==================== L'affichage dans la page ==================== */
 
@@ -186,6 +244,7 @@
   var mouvementReduit = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var infoGen = document.getElementById('voitures-generation');
   var infoRecord = document.getElementById('voitures-record');
+  var infoTour = document.getElementById('voitures-tour');
   var infoJalon = document.getElementById('voitures-jalon');
   var boutonRelancer = document.getElementById('voitures-relancer');
 
@@ -197,18 +256,15 @@
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     largeur = r.width; hauteur = r.height;
     toile.width = Math.round(largeur * dpr); toile.height = Math.round(hauteur * dpr);
-    var vue = Math.min(hauteur, window.innerHeight), cx, cy, rx, ry;
+    var vue = Math.min(hauteur, window.innerHeight), cadre;
     if (largeur >= 768) {
       // En haut à droite, au-dessus de la légende, loin du texte
-      cx = largeur * 0.66; cy = vue * 0.36;
-      rx = Math.min(largeur * 0.24, 460); ry = Math.min(vue * 0.21, 240);
+      cadre = { x: largeur * 0.47, y: vue * 0.09, l: largeur * 0.49, h: vue * 0.47 };
     } else {
-      cx = largeur * 0.5; cy = vue * 0.22;
-      rx = largeur * 0.3; ry = vue * 0.11;
+      cadre = { x: largeur * 0.05, y: vue * 0.1, l: largeur * 0.9, h: vue * 0.23 };
     }
-    var echelle = Math.max(0.55, Math.min(1.3, Math.min(rx, ry) / 260));
-    circuit = creerCircuit(cx, cy, rx, ry, 24 * echelle);
-    sim = new Simulation(circuit, largeur >= 768 ? 28 : 18, echelle);
+    circuit = creerCircuit(cadre, true);
+    sim = new Simulation(circuit, largeur >= 768 ? 28 : 24);
     dessinerFond();
     return true;
   }
@@ -227,9 +283,9 @@
       f.closePath();
     }
     f.lineJoin = 'round';
-    trace(); f.strokeStyle = '#3a3a40'; f.lineWidth = circuit.demi * 2 + 3; f.stroke();
-    trace(); f.strokeStyle = '#141416'; f.lineWidth = circuit.demi * 2 - 1; f.stroke();
-    // ligne de départ
+    trace(); f.strokeStyle = '#4a4a52'; f.lineWidth = circuit.demi * 2 + 3; f.stroke();
+    trace(); f.strokeStyle = '#18181b'; f.lineWidth = circuit.demi * 2 - 1; f.stroke();
+    // Ligne de départ, juste avant La Source
     var p = pts[0], n = Math.sqrt(p.l2), nx = -p.dy / n, ny = p.dx / n;
     f.strokeStyle = '#d4ff3a'; f.lineWidth = 3;
     f.beginPath();
@@ -252,11 +308,11 @@
     ctx.clearRect(0, 0, toile.width, toile.height);
     ctx.drawImage(fond, 0, 0);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    var taille = 5 * sim.s;
+    var taille = Math.max(2.5, circuit.demi * 0.45);
     var meneuse = sim.meneuse();
     sim.voitures.forEach(function (v) {
       if (v === meneuse) return;
-      dessinerVoiture(v, v.vivante ? 'rgba(236, 231, 220, 0.75)' : 'rgba(255, 92, 92, 0.35)', taille);
+      dessinerVoiture(v, v.vivante ? 'rgba(236, 231, 220, 0.8)' : 'rgba(255, 92, 92, 0.35)', taille);
     });
     if (meneuse) {
       // Ce que « voit » la voiture en tête : ses 5 capteurs
@@ -273,21 +329,27 @@
       for (k = 0; k < ANGLES_CAPTEURS.length; k++) {
         a = meneuse.cap + ANGLES_CAPTEURS[k]; d = meneuse.capteurs[k];
         ctx.beginPath();
-        ctx.arc(meneuse.x + Math.cos(a) * d, meneuse.y + Math.sin(a) * d, 2.2, 0, Math.PI * 2);
+        ctx.arc(meneuse.x + Math.cos(a) * d, meneuse.y + Math.sin(a) * d, 2, 0, Math.PI * 2);
         ctx.fill();
       }
-      dessinerVoiture(meneuse, '#d4ff3a', taille * 1.2);
+      dessinerVoiture(meneuse, '#d4ff3a', taille * 1.25);
     }
+  }
+
+  // Temps au tour au format course : 1:47,32
+  function chrono(pas) {
+    var s = pas * sim.secondesParPas, min = Math.floor(s / 60), reste = s - min * 60;
+    return min + ':' + (reste < 10 ? '0' : '') + reste.toFixed(2).replace('.', ',');
   }
 
   function majTextes() {
     if (infoGen) infoGen.textContent = sim.generation;
     if (infoRecord) infoRecord.textContent = sim.record >= 1 ? 'tour complet' : Math.round(sim.record * 100) + ' %';
+    if (infoTour) infoTour.textContent = sim.meilleurTour ? chrono(sim.meilleurTour) + ' (génération ' + sim.genMeilleurTour + ')' : '—';
     if (infoJalon) infoJalon.textContent = sim.tourComplet ? 'Premier tour complet à la génération ' + sim.tourComplet + '.' : '';
   }
 
   // Toujours 100 pas de simulation par seconde, quel que soit l'écran : la course garde la même allure
-  var PAS_PAR_SECONDE = 100;
   var enCours = false, visible = true, dernier = 0, precedent = 0, reserve = 0;
   function boucle(maintenant) {
     if (!enCours) return;
@@ -312,7 +374,7 @@
   // Sans animation : on entraîne d'un coup, puis on montre le meilleur trajet
   function versionFixe() {
     // Budget limité (environ une seconde de calcul) pour ne jamais bloquer la page
-    var budget = 12000;
+    var budget = 15000;
     while (!sim.tourComplet && budget > 0) {
       while (sim.pas() && --budget > 0) { /* génération complète */ }
       sim.evoluer();

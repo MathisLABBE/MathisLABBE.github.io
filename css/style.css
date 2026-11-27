@@ -321,6 +321,7 @@ footer.site a { display: inline-block; padding: .4rem 0; }
 .legende-reseau .legende-titre { font-size: .8rem; color: var(--acide); text-transform: uppercase; letter-spacing: .06em; }
 .legende-reseau .legende-stats { color: var(--os); }
 .legende-reseau .legende-jalon { color: var(--acide); }
+.legende-reseau .legende-note { font-size: .68rem; color: var(--os-doux); }
 .legende-reseau .legende-jalon:empty { display: none; }
 .legende-reseau b { color: var(--os); font-weight: 500; }
 .legende-reseau button {
