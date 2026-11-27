@@ -6,8 +6,9 @@
 (function () {
 
   /* ==================== Le réseau de neurones ==================== */
-  // 6 entrées (5 capteurs + vitesse), 8 neurones cachés, 2 sorties (volant, accélérateur), activation tanh.
-  var TAILLES = [6, 8, 2];
+  // 5 entrées (les capteurs), 8 neurones cachés, 1 sortie (le volant), activation tanh.
+  // La vitesse est la même pour toutes les voitures : seul le pilotage s'apprend.
+  var TAILLES = [5, 8, 1];
   var NB_POIDS = 0, INIT = 0.25, FORCE = 0.5;
   for (var t = 0; t < TAILLES.length - 1; t++) NB_POIDS += (TAILLES[t] + 1) * TAILLES[t + 1];
 
@@ -79,7 +80,7 @@
   /* ==================== La simulation ==================== */
 
   var ANGLES_CAPTEURS = [-1.1, -0.5, 0, 0.5, 1.1];
-  var VITESSE_MAX = 5, BRAQUAGE = 0.05;
+  var VITESSE = 3.2, BRAQUAGE = 0.05;
 
   function Simulation(circuit, nbVoitures, echelle) {
     this.circuit = circuit;
@@ -97,7 +98,7 @@
   Simulation.prototype.demarrer = function () {
     var p0 = this.circuit.pts[0], cap = Math.atan2(p0.dy, p0.dx);
     this.voitures = this.cerveaux.map(function (w) {
-      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * this.s, indice: 0, tours: 0, progression: 0,
+      return { w: w, x: p0.x, y: p0.y, cap: cap, v: VITESSE * this.s, indice: 0, tours: 0, progression: 0,
                vivante: true, meilleurePrg: 0, depuisProgres: 0, capteurs: [0, 0, 0, 0, 0] };
     }, this);
     this.temps = 0;
@@ -118,19 +119,17 @@
     }
   };
 
-  var entrees = new Float64Array(6);
+  var entrees = new Float64Array(5);
   Simulation.prototype.pas = function () {
-    var c = this.circuit, N = c.N, vmax = VITESSE_MAX * this.s, vmin = 0.6 * this.s, vivantes = 0;
+    var c = this.circuit, N = c.N, vivantes = 0;
     this.temps++;
     for (var i = 0; i < this.voitures.length; i++) {
       var v = this.voitures[i];
       if (!v.vivante) continue;
       this.mesurer(v);
       for (var k = 0; k < 5; k++) entrees[k] = 1 - v.capteurs[k] / this.portee;
-      entrees[5] = v.v / vmax;
       var sortie = penser(v.w, entrees);
       v.cap += sortie[0] * BRAQUAGE;
-      v.v = Math.max(vmin, Math.min(vmax, v.v + sortie[1] * 0.09 * this.s));
       v.x += Math.cos(v.cap) * v.v;
       v.y += Math.sin(v.cap) * v.v;
 
@@ -177,7 +176,7 @@
     return m;
   };
 
-  window.SimulationVoitures = { Simulation: Simulation, creerCircuit: creerCircuit, reglages: function (v, b, i, f) { VITESSE_MAX = v; BRAQUAGE = b; INIT = i; FORCE = f; } };
+  window.SimulationVoitures = { Simulation: Simulation, creerCircuit: creerCircuit, reglages: function (v, b, i, f) { VITESSE = v; BRAQUAGE = b; INIT = i; FORCE = f; } };
 
   /* ==================== L'affichage dans la page ==================== */
 
@@ -287,13 +286,16 @@
     if (infoJalon) infoJalon.textContent = sim.tourComplet ? 'Premier tour complet à la génération ' + sim.tourComplet + '.' : '';
   }
 
-  // Plusieurs pas de simulation par image : la course reste lisible, l'apprentissage reste rapide
-  var enCours = false, visible = true, dernier = 0;
+  // Toujours 100 pas de simulation par seconde, quel que soit l'écran : la course garde la même allure
+  var PAS_PAR_SECONDE = 100;
+  var enCours = false, visible = true, dernier = 0, precedent = 0, reserve = 0;
   function boucle(maintenant) {
     if (!enCours) return;
-    var pasParImage = sim.generation <= 2 ? 2 : 3;
-    for (var i = 0; i < pasParImage; i++) {
-      if (!sim.pas()) { sim.evoluer(); break; }
+    if (precedent) reserve += Math.min(maintenant - precedent, 100) * PAS_PAR_SECONDE / 1000;
+    precedent = maintenant;
+    while (reserve >= 1) {
+      reserve -= 1;
+      if (!sim.pas()) { sim.evoluer(); reserve = 0; }
     }
     dessiner();
     if (maintenant - dernier > 200) { majTextes(); dernier = maintenant; }
@@ -302,6 +304,7 @@
   function lancer() {
     if (enCours || mouvementReduit || !visible || document.hidden) return;
     enCours = true;
+    precedent = 0;
     requestAnimationFrame(boucle);
   }
   function arreter() { enCours = false; }

@@ -11,7 +11,8 @@
   --trait: #2b2b2f;
   --acide: #d4ff3a;
   --acide-survol: #e7ff8f;
-  --affiche: "Syne", "Arial Black", sans-serif;
+  --affiche: "Syne", "Arial Black", sans-serif;     /* réservée au nom et au bandeau */
+  --titre: "Space Grotesk", "Segoe UI", Arial, sans-serif; /* titres : plus lisible */
   --texte: "Space Grotesk", "Segoe UI", Arial, sans-serif;
   --mono: "JetBrains Mono", Consolas, monospace;
   --marge: clamp(1rem, 5vw, 4.5rem);
@@ -37,13 +38,13 @@ body {
 
 /* ---------- Typographie ---------- */
 
-h1, h2 { font-family: var(--affiche); font-weight: 800; color: var(--os); letter-spacing: -0.03em; }
+h1, h2 { font-family: var(--titre); font-weight: 700; color: var(--os); letter-spacing: -0.025em; }
 
-h1 { font-size: clamp(2.8rem, 9vw, 7.5rem); line-height: .9; margin: 0 0 2rem; overflow-wrap: break-word; hyphens: auto; }
+h1 { font-size: clamp(2.3rem, 5.5vw, 4.5rem); line-height: 1; margin: 0 0 2rem; overflow-wrap: break-word; hyphens: auto; }
 
 /* Chaque rubrique est numérotée automatiquement : 01, 02, 03… */
 main { counter-reset: rubrique; }
-h2 { font-size: clamp(1.7rem, 6vw, 3.6rem); line-height: 1; margin: 5rem 0 1.75rem; overflow-wrap: break-word; hyphens: auto; }
+h2 { font-size: clamp(1.6rem, 3.6vw, 2.6rem); line-height: 1.1; margin: 5rem 0 1.5rem; overflow-wrap: break-word; hyphens: auto; }
 h2::before {
   counter-increment: rubrique;
   content: counter(rubrique, decimal-leading-zero);
@@ -83,7 +84,8 @@ figcaption { margin-top: .75rem; font-family: var(--mono); font-size: .8rem; lin
 
 header.site { position: relative; z-index: 50; padding: 1.1rem var(--marge); background: var(--noir); }
 
-header.site .entete { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+/* Le bouton Menu à gauche, le nom juste à côté */
+header.site .entete { display: flex; align-items: center; justify-content: flex-start; gap: 1.25rem; }
 
 header.site .nom {
   font-family: var(--affiche);
@@ -93,6 +95,7 @@ header.site .nom {
   text-transform: uppercase;
   color: var(--os);
   text-decoration: none;
+  white-space: nowrap;
 }
 header.site .nom span { color: var(--acide); }
 
@@ -161,11 +164,11 @@ header.site .liens { margin: 1rem 0 0; font-family: var(--mono); font-size: .85r
 .menu-ouvert header.site nav { display: block; margin: auto 0; padding: 2rem 0; }
 .menu-ouvert header.site nav ul { flex-direction: column; gap: 0; margin: 0; }
 .menu-ouvert header.site nav a {
-  font-family: var(--affiche);
-  font-weight: 800;
-  font-size: clamp(2.2rem, 7.5vh, 5.5rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-family: var(--titre);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 6vh, 3.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
   padding: .1em 0;
 }
 .menu-ouvert header.site nav .num { font-size: clamp(.75rem, 1.6vh, 1rem); letter-spacing: .1em; }
@@ -203,7 +206,7 @@ main > p:first-child a { font-family: var(--mono); font-size: .85rem; }
 
 .carte { border-top: 1px solid var(--trait); padding: 1.75rem 0; margin: 0; }
 .carte:last-of-type { border-bottom: 1px solid var(--trait); }
-.carte h3 { overflow-wrap: break-word; hyphens: auto; margin: 0 0 .6rem; font-family: var(--affiche); font-weight: 800; font-size: clamp(1.5rem, 3vw, 2.2rem); letter-spacing: -0.02em; line-height: 1.05; }
+.carte h3 { overflow-wrap: break-word; hyphens: auto; margin: 0 0 .6rem; font-family: var(--titre); font-weight: 700; font-size: clamp(1.35rem, 2.4vw, 1.8rem); letter-spacing: -0.015em; line-height: 1.15; }
 .carte h3 a { text-decoration: none; }
 .carte h3 a::after { content: " →"; }
 .carte h3 a:hover { text-decoration: underline; text-decoration-thickness: 3px; }
@@ -282,6 +285,8 @@ footer.site a { display: inline-block; padding: .4rem 0; }
 .heros-texte a { pointer-events: auto; }
 .heros .surtitre { font-family: var(--mono); font-size: .85rem; letter-spacing: .08em; color: var(--os); margin: 0 0 1rem; }
 .heros .geant {
+  font-family: var(--affiche);
+  font-weight: 800;
   font-size: clamp(3rem, min(13.5vw, 24vh), 15rem);
   line-height: .82;
   white-space: nowrap;
@@ -354,8 +359,8 @@ footer.site a { display: inline-block; padding: .4rem 0; }
   text-decoration: none;
 }
 .ligne-projet .num { font-family: var(--mono); font-size: .85rem; color: var(--os-doux); }
-.ligne-projet .titre { font-family: var(--affiche); font-weight: 800; font-size: clamp(2rem, 6.5vw, 5.5rem); line-height: .95; letter-spacing: -0.04em; color: var(--acide); }
-.ligne-projet .fleche { font-family: var(--affiche); font-weight: 800; font-size: clamp(1.6rem, 4vw, 3rem); color: var(--acide); }
+.ligne-projet .titre { font-family: var(--titre); font-weight: 700; font-size: clamp(1.6rem, 4vw, 3rem); line-height: 1.05; letter-spacing: -0.025em; color: var(--acide); }
+.ligne-projet .fleche { font-family: var(--titre); font-weight: 700; font-size: clamp(1.4rem, 3vw, 2.4rem); color: var(--acide); }
 .ligne-projet .desc { grid-column: 2 / 3; font-size: 1.1rem; color: var(--os); }
 .ligne-projet .meta { grid-column: 2 / 3; font-family: var(--mono); font-size: .78rem; color: var(--os-doux); }
 .ligne-projet:hover { background: var(--acide); color: var(--noir); }
@@ -374,17 +379,17 @@ footer.site a { display: inline-block; padding: .4rem 0; }
 .parcours .quoi { font-size: 1.25rem; }
 .parcours li.avenir::before { background: var(--os); width: 13px; height: 13px; left: -7px; }
 .parcours li.avenir .date { color: var(--os); }
-.parcours li.avenir .quoi { font-family: var(--affiche); font-weight: 800; font-size: clamp(1.6rem, 3.5vw, 2.6rem); line-height: 1.05; letter-spacing: -0.03em; }
+.parcours li.avenir .quoi { font-family: var(--titre); font-weight: 700; font-size: clamp(1.3rem, 2.6vw, 1.9rem); line-height: 1.2; letter-spacing: -0.02em; }
 
 /* Appel final */
 .appel { padding: 8rem var(--marge) 6rem; max-width: 80rem; margin: 0 auto; }
 .appel p { font-family: var(--mono); font-size: .9rem; color: var(--os-doux); margin-bottom: 1.5rem; }
 .appel a {
-  font-family: var(--affiche);
-  font-weight: 800;
-  font-size: clamp(3rem, 12vw, 10.5rem);
-  line-height: .85;
-  letter-spacing: -0.05em;
+  font-family: var(--titre);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
   text-decoration: none;
   display: inline-block;
 }
