@@ -108,8 +108,9 @@
   var ANGLES_CAPTEURS = [-1.1, -0.5, 0, 0.5, 1.1];
   // Réglages : vitesses (en pixels par pas, pour un circuit de 700 px), volant, largeur de piste,
   // durée maximale d'une génération et progrès minimal exigé (sinon la voiture est arrêtée).
-  // L'adhérence limite le virage selon la vitesse : pour passer La Source ou le Bus Stop, il faut freiner avant.
-  var R = { vmin: 0.8, vmax: 3, accel: 0.035, frein: 0.11, frottement: 0.998, braquage: 0.1, adherence: 0.2,
+  // L'adhérence limite le virage selon la vitesse : trop vite, la voiture dérape. Pour passer La Source
+  // ou le Bus Stop, il faut freiner avant.
+  var R = { vmin: 0.8, vmax: 3, accel: 0.035, frein: 0.11, frottement: 0.998, frottementDerapage: 0.985, braquage: 0.1, adherence: 0.1,
             demi: 0.017, duree: 3600, progresMin: 0.02, patience: 100 };
   var PAS_PAR_SECONDE = 150;      // à l'écran : 150 pas de simulation par seconde, toujours
 
@@ -135,7 +136,7 @@
   Simulation.prototype.demarrer = function () {
     var p0 = this.circuit.pts[0], cap = Math.atan2(p0.dy, p0.dx), s = this.s;
     this.voitures = this.cerveaux.map(function (w) {
-      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * s, gaz: 0, frein: 0, indice: 0, tours: 0, toursMax: 0, progression: 0,
+      return { w: w, x: p0.x, y: p0.y, cap: cap, v: 1.2 * s, vx: Math.cos(cap) * 1.2 * s, vy: Math.sin(cap) * 1.2 * s, derapage: 0, gaz: 0, frein: 0, indice: 0, tours: 0, toursMax: 0, progression: 0,
                vivante: true, meilleurePrg: 0, repere: 0, depuisProgres: 0, debutTour: 0, fin: 0, score: 0, capteurs: [0, 0, 0, 0, 0] };
     });
     this.temps = 0;
@@ -171,13 +172,28 @@
       // doucement, apprennent d'abord à tourner, puis à accélérer dans les lignes droites et à freiner avant les virages
       v.gaz = sortie[1] > 0 ? sortie[1] : 0;
       v.frein = sortie[2] > 0 ? sortie[2] : 0;
-      v.v = v.v * R.frottement + (v.gaz * R.accel - v.frein * R.frein) * s;
-      v.v = Math.max(R.vmin * s, Math.min(R.vmax * s, v.v));
-      // Volant : plus on va vite, moins on peut tourner sans perdre l'adhérence
-      var virageMax = Math.min(R.braquage, R.adherence * s / v.v);
-      v.cap += Math.max(-virageMax, Math.min(virageMax, sortie[0] * R.braquage));
-      v.x += Math.cos(v.cap) * v.v;
-      v.y += Math.sin(v.cap) * v.v;
+      // Volant : la voiture pivote, mais sa vitesse garde d'abord son ancienne direction
+      v.cap += sortie[0] * R.braquage;
+      var hx = Math.cos(v.cap), hy = Math.sin(v.cap);
+      var avant = v.vx * hx + v.vy * hy;          // vitesse dans l'axe de la voiture
+      var cote = -v.vx * hy + v.vy * hx;          // vitesse de travers (glissade)
+      // Pédales : accélérer ou freiner dans l'axe de la voiture
+      avant = avant * R.frottement + (v.gaz * R.accel - v.frein * R.frein) * s;
+      avant = Math.max(R.vmin * s, Math.min(R.vmax * s, avant));
+      // Adhérence : les pneus annulent la glissade, mais seulement jusqu'à une certaine limite.
+      // Freiner en tournant use une partie de l'adhérence (cercle de frottement). Au-delà : dérapage.
+      var adherence = R.adherence * s * (1 - 0.5 * v.frein);
+      if (Math.abs(cote) <= adherence) { cote = 0; v.derapage = 0; }
+      else {
+        cote -= (cote > 0 ? 1 : -1) * adherence;
+        v.derapage = Math.abs(cote) / s;
+        avant *= R.frottementDerapage;              // les pneus qui glissent freinent la voiture
+      }
+      v.vx = hx * avant - hy * cote;
+      v.vy = hy * avant + hx * cote;
+      v.v = Math.sqrt(v.vx * v.vx + v.vy * v.vy);
+      v.x += v.vx;
+      v.y += v.vy;
 
       var l = localiser(c, v.x, v.y, v.indice);
       if (v.indice > N * 0.8 && l.indice < N * 0.2) {
@@ -266,7 +282,7 @@
   var boutonAccelerer = document.getElementById('voitures-accelerer');
   var infoMultiplicateur = document.getElementById('voitures-multiplicateur');
 
-  var largeur = 0, hauteur = 0, dpr = 1, sim = null, circuit = null, fond = null;
+  var largeur = 0, hauteur = 0, dpr = 1, sim = null, circuit = null, fond = null, fondCtx = null;
 
   function dimensionner() {
     var r = toile.getBoundingClientRect();
@@ -291,7 +307,7 @@
   function dessinerFond() {
     fond = document.createElement('canvas');
     fond.width = toile.width; fond.height = toile.height;
-    var f = fond.getContext('2d');
+    var f = fondCtx = fond.getContext('2d');
     f.setTransform(dpr, 0, 0, dpr, 0, 0);
     var pts = circuit.pts;
     function trace() {
@@ -310,6 +326,22 @@
     f.moveTo(p.x + nx * circuit.demi, p.y + ny * circuit.demi);
     f.lineTo(p.x - nx * circuit.demi, p.y - ny * circuit.demi);
     f.stroke();
+  }
+
+  // Traces de pneus : chaque voiture qui dérape marque la piste (effacées à chaque génération)
+  function marquerDerapages() {
+    var taille = Math.max(2.5, circuit.demi * 0.45), r = Math.max(0.8, taille * 0.3);
+    for (var i = 0; i < sim.voitures.length; i++) {
+      var v = sim.voitures[i];
+      if (!v.vivante || v.derapage < 0.05) continue;
+      var hx = Math.cos(v.cap), hy = Math.sin(v.cap);
+      fondCtx.fillStyle = 'rgba(205, 205, 215, ' + Math.min(0.35, 0.1 + v.derapage) + ')';
+      for (var cote = -1; cote <= 1; cote += 2) {
+        fondCtx.beginPath();
+        fondCtx.arc(v.x - hx * taille - hy * taille * 0.45 * cote, v.y - hy * taille + hx * taille * 0.45 * cote, r, 0, Math.PI * 2);
+        fondCtx.fill();
+      }
+    }
   }
 
   function dessinerVoiture(v, couleur, taille) {
@@ -379,9 +411,9 @@
   function majCompteur() {
     var m = sim.meneuse();
     if (infoVitesse) infoVitesse.textContent = m ? Math.round(m.v / (R.vmax * sim.s) * 340) + ' km/h' : '—';
-    var pedale = !m ? '' : m.frein > 0.2 ? 'frein' : m.gaz > 0.5 ? 'gaz' : '';
+    var pedale = !m ? '' : m.derapage > 0.05 ? 'derapage' : m.frein > 0.2 ? 'frein' : m.gaz > 0.5 ? 'gaz' : '';
     if (infoPedale && pedale !== dernierePedale) {
-      infoPedale.textContent = pedale === 'frein' ? 'Freinage' : pedale === 'gaz' ? 'Accélération' : '';
+      infoPedale.textContent = { derapage: 'Dérapage', frein: 'Freinage', gaz: 'Accélération' }[pedale] || '';
       infoPedale.className = 'pedale ' + pedale;
       dernierePedale = pedale;
     }
@@ -397,7 +429,8 @@
     precedent = maintenant;
     while (reserve >= 1) {
       reserve -= 1;
-      if (!sim.pas()) { sim.evoluer(); reserve = 0; }
+      if (!sim.pas()) { sim.evoluer(); reserve = 0; dessinerFond(); }
+      else marquerDerapages();
     }
     dessiner();
     if (maintenant - dernier > 120) { majTextes(); majCompteur(); dernier = maintenant; }

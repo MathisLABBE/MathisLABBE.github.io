@@ -304,7 +304,7 @@ footer.site a { display: inline-block; padding: .4rem 0; }
   position: absolute;
   top: 5.5rem;
   right: var(--marge);
-  max-width: 21rem;
+  max-width: 24rem;
   margin: 0;
   font-family: var(--mono);
   font-size: .75rem;
@@ -325,6 +325,7 @@ footer.site a { display: inline-block; padding: .4rem 0; }
 .legende-reseau .pedale { margin-left: .4rem; padding: 0 .35rem; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
 .legende-reseau .pedale.frein { color: #fff; background: #d42a2a; }
 .legende-reseau .pedale.gaz { color: var(--noir); background: var(--acide); }
+.legende-reseau .pedale.derapage { color: var(--noir); background: #ff9f1c; }
 .legende-reseau .legende-jalon:empty { display: none; }
 .legende-reseau b { color: var(--os); font-weight: 500; }
 .legende-reseau button {
